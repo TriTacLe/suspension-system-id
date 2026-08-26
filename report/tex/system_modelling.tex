@@ -1,0 +1,85 @@
+\section{System Modelling}\label{sec:modelling}
+
+\subsection{System Model}
+
+\subsubsection{Differential equation describing the motion of the mass}
+
+The brief describes the suspension as a mass $m$ carrying a spring of stiffness $k$ and a
+viscous damper of coefficient $b$, driven by an applied force $F(t)$ proportional to the
+input voltage. Summing forces on the mass, with $x(t)$ the displacement of the mass from
+its rest position,
+
+\begin{equation}\label{eqn:eom}
+    m\ddot{x}(t) = -b\dot{x}(t) - kx(t) + F(t).
+\end{equation}
+
+The spring force opposes displacement and the damping force opposes velocity, which is
+where both minus signs come from. Every parameter is scaled to the mass, so $m = 1$
+throughout and $k$ and $b$ carry units of stiffness and damping per unit mass. The system
+starts at rest, so all initial conditions are zero.
+
+\subsubsection{Transfer function derived from the differential equation}
+
+Taking the Laplace transform of Equation~\ref{eqn:eom} with zero initial conditions, and
+writing $X(s) = \mathcal{L}\{x(t)\}$ and $F(s) = \mathcal{L}\{F(t)\}$,
+
+\begin{equation}
+    s^2X(s) + bsX(s) + kX(s) = F(s),
+\end{equation}
+
+so the transfer function from applied force to displacement is
+
+\begin{equation}\label{eqn:tf}
+    G(s) = \frac{X(s)}{F(s)} = \frac{1}{s^2 + bs + k}.
+\end{equation}
+
+This is second order with no zeros, so its behaviour is fixed entirely by the two
+coefficients. Comparing Equation~\ref{eqn:tf} against the canonical second order form
+
+\begin{equation}\label{eqn:canonical}
+    G(s) = \frac{A\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}
+\end{equation}
+
+gives the three identities the rest of the report rests on:
+
+\begin{equation}\label{eqn:identities}
+    \omega_n = \sqrt{k}, \qquad
+    \zeta = \frac{b}{2\sqrt{k}}, \qquad
+    A = G(0) = \frac{1}{k}.
+\end{equation}
+
+Here $A$ is the steady state gain in metres per volt, $\omega_n$ the undamped natural
+frequency in rad/s and $\zeta$ the dimensionless damping ratio. Equation~\ref{eqn:identities}
+is what turns control quantities into physical ones: measuring $A$, $\zeta$ and $\omega_n$
+is the same as measuring $k$ and $b$, since $k = \omega_n^2$ and $b = 2\zeta\omega_n$.
+
+\subsection{Methodology}
+
+The simulator is signed on with my student number so the plant keyed to it is loaded, then
+\textbf{Laboratory Testing} is selected. \textbf{Start Step Test} is deliberately not used:
+it steps the height of the aircraft rather than the suspension input, so it does not produce
+the clean step the analysis needs. Logging writes
+\texttt{F34BSuspensionTestData.csv} with time, input and output displacement columns at a
+100~ms sample period.
+
+\begin{enumerate}
+    \item A step of size \gap{step size, V} is applied through \textbf{Offset Input} and
+          logged until the response is visibly flat, so the final value is a genuine steady
+          state and not a point on a still decaying curve.
+    \item The steady state gain follows from the final value theorem, the damping ratio from
+          the overshoot and the natural frequency from the damped period, as set out in
+          Section~\ref{sec:step}.
+    \item Sinusoids are then applied one at a time at the frequencies listed in
+          Table~\ref{tab:freq}, each logged for long enough that the transient has died away
+          before the part of the record that is used for fitting.
+    \item Each log is processed by the script in Appendix~\ref{sec:appendix}, which fits
+          amplitude and phase at the known drive frequency by least squares rather than
+          reading peaks by eye, since 100~ms sampling is too coarse for peak picking to be
+          reliable.
+\end{enumerate}
+
+Two sources of uncertainty are worth stating before any numbers appear. The 100~ms sample
+period is coarse relative to the transient, so a true peak can fall between samples and the
+measured overshoot then reads low, which biases $\zeta$ high. And the step is applied on top
+of a non-zero resting displacement, so every amplitude in this report is a change from the
+pre-step baseline, not an absolute displacement.

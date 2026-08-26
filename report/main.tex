@@ -1,0 +1,46 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage[pdftex]{graphicx}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{xcolor}
+
+\linespread{1.06}
+\setlength{\parskip}{8pt plus2pt minus2pt}
+
+\widowpenalty 10000
+\clubpenalty 10000
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+% Marks a value that only exists once the bench data is captured. Anything still
+% red on the day of submission is not finished.
+\newcommand{\gap}[1]{\textcolor{red}{[\textnormal{#1}]}}
+
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+\include{tex/titlepage}
+\tableofcontents
+\newpage
+\setcounter{page}{1}
+
+\input{tex/introduction}
+\input{tex/system_modelling}
+\input{tex/system_id}
+\input{tex/conclusion}
+
+\appendix
+\include{tex/appendix}
+
+\begin{thebibliography}{9}
+\bibitem{nise} Nise, N. S. (2019). \emph{Control systems engineering} (8th ed.). Wiley.
+\bibitem{braae} Braae, M. (2015). \emph{Control systems engineering notes}. University of Cape Town.
+\end{thebibliography}
+
+\end{document}

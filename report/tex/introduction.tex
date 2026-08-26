@@ -1,0 +1,20 @@
+\section{Introduction}\label{sec:intro}
+
+The suspension of the simulated F-34B is a spring, mass and damper system whose spring
+constant and damping constant are generated from my student number, so the plant is
+unknown before the experiment and cannot be looked up. The aim of this lab is to recover a
+transfer function for that plant from measurements alone, which is what system
+identification means in practice: choose inputs that make the unknown parameters visible in
+the output, then read those parameters off the response.
+
+Two experiments are used because each one exposes a different part of the model. A step
+input shows the transient directly, so the steady state gain, the presence or absence of
+oscillation, and the damped period can be read from a single log. A set of sinusoidal
+inputs samples the frequency response, which fixes the corner frequency and the phase
+behaviour, and gives an independent check on the values taken from the step. Where the two
+disagree, that disagreement is itself a result and is reported as such.
+
+Section~\ref{sec:modelling} derives the model structure from the equation of motion given
+in the brief, and states which measurable feature of a response determines which parameter.
+Section~\ref{sec:system_id} applies that to the measurements. Section~\ref{sec:validation}
+simulates the identified model and compares it against the same data it was built from.

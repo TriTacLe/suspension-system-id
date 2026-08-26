@@ -1,0 +1,31 @@
+\section{Appendix and Notes}\label{sec:appendix}
+
+\subsection{Analysis script}
+
+All numbers in this report come from \texttt{analyse\_lab1.py}, which reads the CSV files
+the simulator writes and produces every figure in the report. It is invoked as
+
+\begin{verbatim}
+python analyse_lab1.py step.csv \
+    --sine 0.5=sine_0p5.csv --sine 1.0=sine_1p0.csv ...
+\end{verbatim}
+
+where each \texttt{--sine} argument gives the drive frequency in rad/s and the log recorded
+at that frequency. The script reads the gain from the change in the final value, the damping
+ratio from the first overshoot with the logarithmic decrement as a cross-check, and the
+damped period from the mean spacing of every peak in the record. Amplitude and phase at each
+drive frequency are fitted by least squares against a sinusoid at the known frequency, which
+avoids reading peaks off records sampled at 100~ms. If a response shows no overshoot the
+script instead sweeps $\zeta \geq 1$ and $\omega_n$ for the least squares best fit to the
+analytic overdamped step response, and also reports the reduced first order model taken from
+the 63.2\% point.
+
+The script carries a self-test, run with \texttt{--selftest}, which generates responses from
+a plant with known $k$ and $b$ and checks that the analysis recovers them. It recovers
+$k = 4$ and $b = 0.8$ for the underdamped case and $k = 1$ and $b = 3$ for the overdamped
+case, and matches the analytic magnitude and phase at every test frequency.
+
+\subsection{Raw data}
+
+\gap{List the log files: the step log and one log per frequency, with the step size and the
+drive amplitude used for each.}

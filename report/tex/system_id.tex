@@ -1,0 +1,202 @@
+\section{System Identification}\label{sec:system_id}
+
+\subsection{Step Response Test}\label{sec:step}
+
+Figure~\ref{fig:input_step} shows the input that was applied and Figure~\ref{fig:step} the
+displacement it produced. The three features marked on Figure~\ref{fig:step}, the final
+value, the first peak and the spacing between successive peaks, are the only measurements
+the step stage needs; each one is used in a separate calculation below.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/input_step.png}
+    \caption{Step input applied through \textbf{Offset Input}. The step is
+    \gap{step size} V applied at $t = \gap{step time}$ s, held for the rest of the record.}
+    \label{fig:input_step}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/step_response.png}
+    \caption{Measured step response. The response settles at \gap{final value} m, marked by
+    the dashed line, after an overshoot of \gap{overshoot} above that value at the first
+    peak. Successive peaks are \gap{period} s apart, which is the damped period $T_d$.}
+    \label{fig:step}
+\end{figure}
+
+\subsubsection*{Question 1: what is the gain of the system?}
+
+For a step of size $U$, the final value theorem applied to Equation~\ref{eqn:canonical} gives
+
+\begin{equation}
+    x_\infty = \lim_{s\to0} s\,G(s)\frac{U}{s} = G(0)\,U = A\,U,
+\end{equation}
+
+so the gain is the change in displacement divided by the size of the step,
+
+\begin{equation}\label{eqn:gain}
+    A = \frac{x_\infty - x_0}{U} = \frac{\gap{final} - \gap{baseline}}{\gap{U}} = \gap{A}~\text{m/V}.
+\end{equation}
+
+The baseline $x_0$ is subtracted because the suspension rests at a non-zero displacement
+before the step, visible on the left of Figure~\ref{fig:step}. The input value used is the
+one recorded in the log rather than the number typed into the simulator, in case the
+simulator scales it. From Equation~\ref{eqn:identities}, $k = 1/A = \gap{k}$.
+
+\subsubsection*{Question 2: does the system have real or complex poles?}
+
+The response in Figure~\ref{fig:step} \gap{oscillates about its final value / rises to it
+without overshoot}, so the system is \gap{underdamped, $\zeta < 1$ / overdamped,
+$\zeta > 1$} and the poles are therefore \gap{a complex conjugate pair / two distinct real
+poles}. Oscillation about the final value is only possible when the poles have a non-zero
+imaginary part, which is what makes this readable straight off the shape of the curve.
+
+\subsubsection*{Question 3: where are the dominant poles?}
+
+For an underdamped second order system the fractional overshoot $M_p$ measured from
+Figure~\ref{fig:step} fixes the damping ratio,
+
+\begin{equation}\label{eqn:zeta}
+    M_p = e^{-\pi\zeta/\sqrt{1-\zeta^2}}
+    \quad\Longrightarrow\quad
+    \zeta = \frac{-\ln M_p}{\sqrt{\pi^2 + \ln^2 M_p}} = \gap{zeta},
+\end{equation}
+
+and the spacing of successive peaks fixes the damped natural frequency,
+
+\begin{equation}\label{eqn:wd}
+    \omega_d = \frac{2\pi}{T_d} = \frac{2\pi}{\gap{Td}} = \gap{wd}~\text{rad/s},
+    \qquad
+    \omega_n = \frac{\omega_d}{\sqrt{1-\zeta^2}} = \gap{wn}~\text{rad/s}.
+\end{equation}
+
+The poles are then
+
+\begin{equation}\label{eqn:poles}
+    s_{1,2} = -\zeta\omega_n \pm j\omega_d = \gap{sigma} \pm j\,\gap{wd}.
+\end{equation}
+
+Averaging the period over every peak in the record rather than using one pair reduces the
+effect of the 100~ms sampling, and the damping ratio is cross-checked by the logarithmic
+decrement over the same peaks, which gives \gap{zeta from log decrement} against
+\gap{zeta from overshoot} from Equation~\ref{eqn:zeta}. \gap{Comment on how close the two
+readings are and which is used going forward.}
+
+\subsubsection*{Question 4: what corner frequency follows from that?}
+
+For a second order system with no zeros the magnitude asymptotes cross at the undamped
+natural frequency, so the expected corner frequency is $\omega_n = \gap{wn}$~rad/s. This is
+a prediction made from the step data alone, and it is what the frequency response test in
+Section~\ref{sec:freq} is used to confirm.
+
+\subsection{Frequency Response}\label{sec:freq}
+
+The simulator applies one sinusoid at a time rather than sweeping, so the frequencies have
+to be chosen in advance. They are placed around the corner frequency predicted in
+Question~4, since that is where the magnitude peak and the $-90^\circ$ phase crossing sit
+and where the curve carries the most information about $\zeta$. Two points well below and
+two well above $\omega_n$ fix the low frequency gain and the high frequency roll-off, which
+is what confirms the system is second order rather than first.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Point} & \textbf{$\omega$ [rad/s]} & \textbf{Amplitude ratio} &
+\textbf{$|G|$ [dB]} & \textbf{Phase [deg]} \\
+\midrule
+$0.2\,\omega_n$  & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
+$0.5\,\omega_n$  & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
+$0.8\,\omega_n$  & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
+$\omega_n$       & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
+$1.25\,\omega_n$ & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
+$2\,\omega_n$    & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
+$4\,\omega_n$    & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
+\bottomrule
+\end{tabular}
+\caption{Frequency response measurements. Amplitude ratio and phase are fitted by least
+squares at the known drive frequency, over the part of each log after the transient has
+decayed.}
+\label{tab:freq}
+\end{table}
+
+Figure~\ref{fig:bode} plots those points against the response of the model identified from
+the step test. The magnitude peak sits at \gap{measured peak frequency} rad/s and the phase
+passes $-90^\circ$ at \gap{measured -90 crossing} rad/s, against the $\omega_n = \gap{wn}$
+rad/s predicted in Question~4. \gap{State whether that confirms the step estimate and by how
+much it differs.}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/bode_plot.png}
+    \caption{Measured frequency response against the model identified from the step test.
+    The dashed line marks $\omega_n$ from the step data; the measured phase crosses
+    $-90^\circ$ at \gap{measured -90 crossing} rad/s, which is the independent confirmation
+    of the natural frequency.}
+    \label{fig:bode}
+\end{figure}
+
+The height of the magnitude peak is a second, independent reading of the damping ratio,
+since for $\zeta < 1/\sqrt{2}$ the peak magnitude satisfies
+
+\begin{equation}\label{eqn:mr}
+    M_r = \frac{1}{2\zeta\sqrt{1-\zeta^2}},
+\end{equation}
+
+which gives $\zeta = \gap{zeta from Mr}$ against $\gap{zeta from overshoot}$ from the step.
+The high frequency slope is \gap{measured slope} dB/decade, which is
+\gap{consistent / inconsistent} with the $-40$~dB/decade expected of a system with two poles
+and no zeros. \gap{If a second corner is visible, say where it is and what non-dominant pole
+it implies.}
+
+\subsection{System Model}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lrl}
+\toprule
+\textbf{Quantity} & \textbf{Value} & \textbf{Source} \\
+\midrule
+Gain $A$                  & \gap{A}    & Equation~\ref{eqn:gain}, final value of Figure~\ref{fig:step} \\
+Damping ratio $\zeta$     & \gap{zeta} & Equation~\ref{eqn:zeta}, overshoot of Figure~\ref{fig:step} \\
+Natural frequency $\omega_n$ & \gap{wn} & Equation~\ref{eqn:wd}, peak spacing, confirmed in Figure~\ref{fig:bode} \\
+Spring coefficient $k$    & \gap{k}    & $k = \omega_n^2$ \\
+Damping coefficient $b$   & \gap{b}    & $b = 2\zeta\omega_n$ \\
+Poles                     & \gap{poles} & Equation~\ref{eqn:poles} \\
+\bottomrule
+\end{tabular}
+\caption{Identified parameters of the suspension.}
+\label{tab:model}
+\end{table}
+
+Substituting Table~\ref{tab:model} into Equation~\ref{eqn:tf}, the identified plant is
+
+\begin{equation}\label{eqn:identified}
+    G(s) = \frac{1}{s^2 + \gap{b}\,s + \gap{k}}.
+\end{equation}
+
+The two coefficients come from different measurements, so they fail differently: $k$ rests
+on the final value, which is the most reliable number in the record, while $b$ rests on the
+overshoot, which the coarse sampling biases. \gap{State which parameter you trust more and
+why, given your own data.}
+
+\subsection{Model Validation}\label{sec:validation}
+
+Equation~\ref{eqn:identified} was simulated and overlaid on the measurements it was built
+from. Figure~\ref{fig:validation} shows the comparison for the step test, with an RMS error
+of \gap{rms} m over the logged response. The model curve in Figure~\ref{fig:bode} is the
+same check in the frequency domain: it is drawn from the step parameters only, so any
+agreement with the measured points is genuine confirmation and not a fit.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/validation_step.png}
+    \caption{Simulated response of the identified model against the measured step response.
+    The RMS error over the record is \gap{rms} m, concentrated \gap{where}.}
+    \label{fig:validation}
+\end{figure}
+
+\gap{Describe where the model and the measurement part company: first peak height, decay
+rate of later peaks, steady state offset. Say which of the assumptions in
+Section~\ref{sec:modelling} that discrepancy points at, and whether the result is good
+enough for the model to be usable for control design.}
