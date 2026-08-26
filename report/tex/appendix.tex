@@ -6,12 +6,11 @@ All numbers in this report come from \texttt{analyse\_lab1.py}, which reads the 
 the simulator writes and produces every figure in the report. It is invoked as
 
 \begin{verbatim}
-python analyse_lab1.py step.csv \
-    --sine 0.5=sine_0p5.csv --sine 1.0=sine_1p0.csv ...
+python analyse_lab1.py step.csv --sine-dir .
 \end{verbatim}
 
-where each \texttt{--sine} argument gives the drive frequency in rad/s and the log recorded
-at that frequency. The script reads the gain from the change in the final value, the damping
+where \texttt{--sine-dir} is the folder holding the sine logs, each named
+\texttt{sine\_<frequency>.csv} so the drive frequency is read from the file name. The script reads the gain from the change in the final value, the damping
 ratio from the first overshoot with the logarithmic decrement as a cross-check, and the
 damped period from the mean spacing of every peak in the record. Amplitude and phase at each
 drive frequency are fitted by least squares against a sinusoid at the known frequency, which

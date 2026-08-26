@@ -8,6 +8,7 @@ from those the spring and damping coefficients of
     x'' = -b x' - k x + F   ->   G(s) = 1 / (s^2 + b s + k)
 
 Usage:
+    analyse_lab1.py step.csv --sine-dir .
     analyse_lab1.py step.csv --sine 0.5=sine_0p5.csv --sine 1.0=sine_1p0.csv ...
     analyse_lab1.py --selftest
 
@@ -190,6 +191,27 @@ def fit_sinusoid(t, y, w):
     coef, *_ = np.linalg.lstsq(basis, y, rcond=None)
     a, b, _ = coef
     return math.hypot(a, b), math.atan2(-b, a)
+
+
+def sine_dir_logs(directory):
+    """Sine logs in a folder, sorted, so the frequencies need not be typed out."""
+    if not directory:
+        return []
+    names = [n for n in sorted(os.listdir(directory))
+             if n.lower().startswith("sine_") and n.lower().endswith(".csv")]
+    if not names:
+        raise SystemExit(f"{directory}: no files named sine_<frequency>.csv")
+    return [os.path.join(directory, n) for n in names]
+
+
+def frequency_from_name(path):
+    """Drive frequency from a name like sine_1p6.csv, where 1p6 means 1.6 rad/s."""
+    stem = os.path.splitext(os.path.basename(path))[0]
+    text = stem.split("_", 1)[1].replace("p", ".")
+    try:
+        return float(text)
+    except ValueError:
+        raise SystemExit(f"{path}: cannot read a frequency out of the file name")
 
 
 def analyse_sine(path, w, skip_fraction=0.5):
@@ -421,6 +443,9 @@ def main():
     ap.add_argument("step_csv", nargs="?", help="step test log from the simulator")
     ap.add_argument("--sine", action="append", default=[], metavar="W=FILE",
                     help="sine test log and the frequency in rad/s it was run at")
+    ap.add_argument("--sine-dir", metavar="DIR",
+                    help="folder of sine logs named sine_<frequency>.csv, "
+                         "where 1p6 means 1.6 rad/s")
     ap.add_argument("--outdir", default="report/figures", help="where the figures go")
     ap.add_argument("--skip", type=float, default=0.5,
                     help="fraction of each sine log to discard as transient")
@@ -441,6 +466,8 @@ def main():
     for spec in args.sine:
         w, _, path = spec.partition("=")
         points.append(analyse_sine(path, float(w), args.skip))
+    for path in sine_dir_logs(args.sine_dir):
+        points.append(analyse_sine(path, frequency_from_name(path), args.skip))
     points.sort(key=lambda p: p["w_rad_s"])
 
     plot_step_input(t, u, args.outdir)
