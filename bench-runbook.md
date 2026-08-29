@@ -46,6 +46,24 @@ That is the whole lab. Ten logs, one hour.
 2. Top box, **Select your student number**, click the dropdown, pick **LXXTRI004**.
 3. Wait until the panel reads **Ready**. Your plant is now loaded. If you skip this you are
    testing somebody else's system and the marks go with it.
+
+**If LXXTRI004 is not in the dropdown.** It was missing as of 29 August, the list running
+from LTSNKU002 straight to LZZALB001, and Dr Shield has been asked to add it. Nothing in
+this runbook works without it, because no selection means no plant. Do not sit through the
+slot hoping it appears.
+
+Check the list first, before anything else. If the number is not there:
+
+1. Find the lab staff member on duty and ask them to add LXXTRI004 to the simulator. It is
+   a list on that machine, so there is a chance it can be done while you wait.
+2. If they cannot, photograph the dropdown showing the gap between LTSNKU002 and
+   LZZALB001, with the date visible if you can manage it. That photo is the evidence for
+   the extension request.
+3. Mail Dr Shield from the lab, not later. Say the slot has been used and the number is
+   still missing, attach the photo, and ask her to confirm the extension. The 20 percent
+   per day late penalty starts on 4 September and the argument for waiving it is much
+   easier to make on the day than a week afterwards.
+4. Rebook the next available slot before you leave the building.
 4. Click **Laboratory Testing** in the **Test Functions** box.
 
 Do not click **Start Step Test**. That button drops the aircraft and steps its height, not
