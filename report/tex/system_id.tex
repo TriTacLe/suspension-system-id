@@ -112,13 +112,25 @@ $\omega_n$       & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
 $1.25\,\omega_n$ & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
 $2\,\omega_n$    & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
 $4\,\omega_n$    & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
+$6\,\omega_n$    & \gap{w} & \gap{ratio} & \gap{dB} & \gap{phase} \\
 \bottomrule
 \end{tabular}
 \caption{Frequency response measurements. Amplitude ratio and phase are fitted by least
 squares at the known drive frequency, over the part of each log after the transient has
-decayed.}
+decayed. The multiples in the first column are nominal: they were set at the bench from the
+damped frequency read off the step response, before $\omega_n$ itself was known.}
 \label{tab:freq}
 \end{table}
+
+The gain can be read a second time here, from the flat low frequency end of
+Figure~\ref{fig:bode}, where $|G| \to A$. That gives $A = \gap{A from asymptote}$ m/V
+against $\gap{A}$ m/V from the final value of the step, a difference of
+\gap{gain mismatch}\%. \gap{If the two disagree by more than a few percent, the input column
+is not in the units the model assumes and one of the two tests carries a scaling error. Say
+which you believe and why.} Part of any gap is expected rather than an error: the lowest
+frequency tested sits at \gap{ratio} of $\omega_n$, and the model itself predicts a reading
+\gap{expected bias}\% above $A$ there, because the magnitude has already begun to rise
+towards resonance.
 
 Figure~\ref{fig:bode} plots those points against the response of the model identified from
 the step test. The magnitude peak sits at \gap{measured peak frequency} rad/s and the phase
@@ -144,10 +156,18 @@ since for $\zeta < 1/\sqrt{2}$ the peak magnitude satisfies
 \end{equation}
 
 which gives $\zeta = \gap{zeta from Mr}$ against $\gap{zeta from overshoot}$ from the step.
-The high frequency slope is \gap{measured slope} dB/decade, which is
-\gap{consistent / inconsistent} with the $-40$~dB/decade expected of a system with two poles
-and no zeros. \gap{If a second corner is visible, say where it is and what non-dominant pole
-it implies.}
+Solving Equation~\ref{eqn:mr} for $\zeta$ and substituting into
+$\omega_r = \omega_n\sqrt{1-2\zeta^2}$ recovers $\omega_n = \gap{wn from peak}$ rad/s, a
+third reading of the same quantity.
+
+The high frequency slope, fitted over the \gap{n} points above $2\omega_n$, is
+\gap{measured slope} dB/decade against the $-40$~dB/decade expected of a system with two
+poles and no zeros. That asymptote is only reached well above the corner: measured just past
+resonance the curve falls considerably steeper than $-40$, so the comparison is only fair if
+the highest frequency tested, here \gap{highest w over wn}$\,\omega_n$, is far enough out.
+\gap{State whether it was, and therefore whether the measured slope supports the second order
+model or simply reflects where the points sit.} \gap{If a second corner is visible, say where
+it is and what non-dominant pole it implies.}
 
 \subsection{System Model}
 
@@ -175,6 +195,14 @@ Substituting Table~\ref{tab:model} into Equation~\ref{eqn:tf}, the identified pl
     G(s) = \frac{1}{s^2 + \gap{b}\,s + \gap{k}}.
 \end{equation}
 
+Equation~\ref{eqn:identities} gives $k$ twice over, once as $1/A$ from the steady state gain
+and once as $\omega_n^2$ from the oscillation, and these are independent measurements of the
+same physical spring. Here they are \gap{k from gain} and \gap{k from wn}, differing by
+\gap{k mismatch}\%. \gap{If they agree, say so: it confirms that the input column really is
+force in the units Equation~\ref{eqn:eom} assumes. If they do not, the simulator is scaling
+the input, and $\omega_n^2$ is then the trustworthy one because it comes from timing rather
+than amplitude.}
+
 The two coefficients come from different measurements, so they fail differently: $k$ rests
 on the final value, which is the most reliable number in the record, while $b$ rests on the
 overshoot, which the coarse sampling biases. \gap{State which parameter you trust more and
@@ -200,3 +228,28 @@ agreement with the measured points is genuine confirmation and not a fit.
 rate of later peaks, steady state offset. Say which of the assumptions in
 Section~\ref{sec:modelling} that discrepancy points at, and whether the result is good
 enough for the model to be usable for control design.}
+
+Quantified in the frequency domain over the points of Table~\ref{tab:freq}, the same model
+predicts the measured magnitude to \gap{mag rms} dB RMS and the measured phase to
+\gap{phase rms} degrees RMS. Reporting both domains matters because they fail differently:
+a magnitude error that is uniform across frequency is a gain or scaling problem, while an
+error that grows with frequency points at the damping term instead.
+\gap{Say which pattern your own errors follow.}
+
+\subsubsection*{Repeatability}
+
+The step test was run \gap{n} times without changing anything, so the spread across those
+runs separates the uncertainty of the method from the error of the model. Across the repeat
+runs the identified values spanned \gap{spread}\% of their mean for $\omega_n$ and
+\gap{spread}\% for $\zeta$. \gap{Say whether the model error in Figure~\ref{fig:validation}
+is larger than that spread. If it is, the mismatch is a real modelling limitation; if it is
+not, the model is as good as the measurement allows and quoting more figures would be
+false precision.}
+
+\subsubsection*{Improving the model}
+
+\gap{The parameters above come from the step test alone. Say what you would change to do
+better, and if you tried it, what happened. The obvious candidates are refitting
+$\zeta$ and $\omega_n$ to the frequency points as well as the step, adding the non-dominant
+pole if the roll-off suggested one, and logging faster than 100 ms if the equipment allowed
+it.}

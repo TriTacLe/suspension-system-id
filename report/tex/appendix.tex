@@ -22,7 +22,14 @@ the 63.2\% point.
 The script carries a self-test, run with \texttt{--selftest}, which generates responses from
 a plant with known $k$ and $b$ and checks that the analysis recovers them. It recovers
 $k = 4$ and $b = 0.8$ for the underdamped case and $k = 1$ and $b = 3$ for the overdamped
-case, and matches the analytic magnitude and phase at every test frequency.
+case, matches the analytic magnitude and phase at every test frequency, and confirms that
+the gain, damping ratio and natural frequency read back off the synthetic frequency response
+agree with the plant they were generated from. This matters because it separates a mistake
+in the analysis from a genuine feature of the measurements: anything the self-test recovers
+correctly from known data, but gets wrong on the logs, is a property of the suspension and
+not a bug.
+
+\lstinputlisting[caption={\texttt{analyse\_lab1.py}}]{../analyse_lab1.py}
 
 \subsection{Raw data}
 

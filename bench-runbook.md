@@ -105,9 +105,14 @@ hump spacing of 3.2 s gives W = 6.28 / 3.2 = 2.0.
 
 If there was no overshoot, use W = 1 and expect to add frequencies as you go.
 
+W is the damped natural frequency, not the undamped one. They differ by the factor
+sqrt(1 - zeta squared), which is a few percent for a lightly damped suspension. That is
+close enough to choose test frequencies with, which is all W is for here. Do not write W
+into the report as the natural frequency: the script computes both properly from the log.
+
 ## Stage 2: the sine tests
 
-Seven runs, roughly forty minutes. Test at these frequencies, worked out from your W:
+Eight runs, roughly forty five minutes. Test at these frequencies, worked out from your W:
 
 | Point | Frequency to enter | Example, W = 2.0 |
 | --- | --- | --- |
@@ -118,10 +123,21 @@ Seven runs, roughly forty minutes. Test at these frequencies, worked out from yo
 | 5 | 1.25 x W | 2.5 |
 | 6 | 2 x W | 4.0 |
 | 7 | 4 x W | 8.0 |
+| 8 | 6 x W | 12.0 |
 
-Two points well below W and two well above are what prove the suspension behaves like a
+Two points well below W and three well above are what prove the suspension behaves like a
 second order system rather than a simpler one. The three around W are where the interesting
 behaviour lives.
+
+Point 8 is the one that earns the roll-off claim. Two poles and no zeros give -40 dB per
+decade, but only well above W. Measured between 2W and 4W the slope comes out nearer -60,
+because just past resonance the curve falls much steeper than its asymptote. Without a
+point out at 6W the report would show about -60 and read as though the second order model
+had failed, when it has not. If you are short of time, point 8 matters more than point 5.
+
+Logging is fixed at 100 ms, so the highest frequency worth entering is about 15 rad/s. Above
+that there are too few samples per cycle to fit anything. If 6 x W lands above 15, enter 15
+and note in the report that the sampler set the ceiling.
 
 For each frequency:
 
@@ -150,10 +166,13 @@ and more as frequency rises. At W it should be about a quarter cycle behind.
 
 ## Before you leave
 
-- Ten CSV files on the stick: `step.csv`, `step2.csv`, `step3.csv`, and seven `sine_*.csv`.
-- Open one of them in Excel on the lab machine and check it has three columns, Time(s),
-  Input and Output_Displacement, with numbers under them. An empty or single column file
+- Eleven CSV files on the stick: `step.csv`, `step2.csv`, `step3.csv`, and eight `sine_*.csv`.
+- Open one of them in Excel on the lab machine and check it has three columns, a time, an
+  input and an output displacement, with numbers under them. An empty or single column file
   means logging was not running and the test has to be redone.
+- Write down the exact column headings as spelled in the file. The script matches them
+  loosely, so spacing and brackets do not matter, but if it still cannot find a column it
+  prints the headings it did find and they go straight into `_column()`.
 - The four handwritten numbers from Stage 1.
 - Click **Stop lab. Testing**.
 
@@ -179,19 +198,28 @@ another plant is worth nothing.
 From `assignments/lab-1/`, with the CSVs in one folder:
 
 ```
-../../.venv/bin/python analyse_lab1.py step.csv --sine-dir .
+../../.venv/bin/python analyse_lab1.py step.csv step2.csv step3.csv --sine-dir .
 ```
 
-That is the whole analysis. It reads the step and every `sine_*.csv` in the folder, prints
-the gain, damping ratio, natural frequency, spring and damping coefficients, poles and
-transfer function, writes `results.json`, and puts four finished figures into
-`report/figures/`.
+That is the whole analysis. It reads every step log you pass and every `sine_*.csv` in the
+folder, prints the gain, damping ratio, natural frequency, spring and damping coefficients,
+poles and transfer function, writes `results.json`, and puts four finished figures into
+`report/figures/`. The figures come from the first step log; the others are there to give
+the spread across repeat runs, which the report quotes as the repeatability of the method.
+
+It also reads the four Stage 1 answers a second time straight off the sine data: the gain
+from the low frequency end, the damping ratio from the height of the resonant peak, and the
+natural frequency from where the phase crosses -90 degrees. Comparing those against the step
+answers is what the brief is built around, so both sets go in the report.
 
 It needs numpy and matplotlib. The virtualenv at `../../.venv` in the course folder has
 them already. Anywhere else: `python -m venv .venv && .venv/bin/pip install numpy matplotlib`.
 
-Run it once per step log if you want to compare the three, using `--outdir` to keep the
-figures apart.
+Check it still passes its own tests before trusting it on your data:
+
+```
+../../.venv/bin/python analyse_lab1.py --selftest --outdir /tmp/lab1check
+```
 
 Then:
 
