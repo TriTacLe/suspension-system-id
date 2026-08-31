@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Suspension Bench Checklist</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2314181c'/%3E%3Cpath d='M1 11q3.5 0 3.5-6t3.5 0 3.5 6 3.5-6' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -18,8 +19,7 @@
     --rule:    #c2cad0;
     --hair:    #dfe4e8;
     --signal:  #a81f19;
-    --sig-bg:  #f9e7e5;
-    --hold-bg: #f6eecf;
+    --hold-bg: #e9edf0;
 
     --sans: "Barlow", ui-sans-serif, sans-serif;
     --cond: "Barlow Condensed", "Barlow", ui-sans-serif, sans-serif;
@@ -35,8 +35,7 @@
       --rule:    #3b454e;
       --hair:    #262f37;
       --signal:  #ff9089;
-      --sig-bg:  #33191a;
-      --hold-bg: #2c2712;
+      --hold-bg: #1e252b;
     }
   }
 
@@ -48,8 +47,7 @@
     --rule:    #3b454e;
     --hair:    #262f37;
     --signal:  #ff9089;
-    --sig-bg:  #33191a;
-    --hold-bg: #2c2712;
+    --hold-bg: #1e252b;
   }
 
   * { box-sizing: border-box; }
@@ -63,6 +61,7 @@
     font-family: var(--sans);
     font-size: 1.125rem;
     line-height: 1.5;
+    overflow-wrap: break-word;
   }
 
   .sheet {
@@ -104,6 +103,32 @@
     color: var(--ink-mid);
     max-width: 36em;
   }
+
+  .fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.8rem;
+    margin: .9rem 0 0;
+  }
+
+  .fields p {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+    flex: 1 1 9rem;
+    margin: 0;
+  }
+
+  .fields span {
+    font-family: var(--cond);
+    font-weight: 600;
+    font-size: .95rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+
+  .fields i { flex: 1; border-bottom: 1.5px solid var(--rule); height: 1.1rem; }
 
   /* tally */
 
@@ -168,7 +193,7 @@
     font-weight: 700;
     font-size: 2rem;
     line-height: 1;
-    color: var(--rule);
+    color: var(--ink);
     width: 1.6rem;
     flex: none;
     font-variant-numeric: tabular-nums;
@@ -195,7 +220,7 @@
   p { margin: 0 0 .7rem; }
   .mid { color: var(--ink-mid); }
 
-  code, .mono { font-family: var(--mono); font-size: .875em; }
+  code, .mono { font-family: var(--mono); font-size: .875em; overflow-wrap: anywhere; }
   code { background: var(--tint); padding: .05em .3em; }
 
   a { color: var(--ink); text-underline-offset: .16em; text-decoration-thickness: 2px; }
@@ -209,7 +234,13 @@
     border-top: 2px solid var(--ink);
   }
 
-  .notice.stop { background: var(--sig-bg); border-top-color: var(--signal); }
+  .notice.stop {
+    background: transparent;
+    border-top: 3px solid var(--signal);
+    border-bottom: 1px solid var(--signal);
+    padding-left: 0;
+    padding-right: 0;
+  }
   .notice.hold { background: var(--hold-bg); }
   .notice p:last-child { margin-bottom: 0; }
   .notice code { background: rgb(0 0 0 / .07); }
@@ -385,6 +416,10 @@
   <div class="head">
     <p class="slug">EEE3094S Lab 1</p>
     <h1>Suspension bench sheet</h1>
+    <div class="fields">
+      <p><span>Machine</span><i></i></p>
+      <p><span>Started</span><i></i></p>
+    </div>
     <p>Eleven logs, about an hour. Tick each one as it lands on the stick. The ticks are kept on this phone, so you can lock it between runs.</p>
   </div>
 
