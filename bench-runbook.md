@@ -26,7 +26,7 @@ Due 4 September. One PDF to Gradescope through the LTI link in the Lab 1 folder 
 | 3 | Check | Three columns with numbers in one CSV, then stop testing | none | 3 min |
 
 Rules that do not change: **log before you apply**, and **copy and rename the CSV after
-every single run**, because the program overwrites one fixed file name.
+every single run**, because the program appends every run to one fixed file name.
 
 ```mermaid
 flowchart TD
@@ -149,7 +149,8 @@ Do this three times. The whole run is about five minutes.
    drifting gives a wrong spring coefficient and everything downstream inherits it.
 7. Click **Stop Logging**.
 8. Copy `C:\F34BSuspensionTestData\F34BSuspensionTestData.csv` to your stick and rename it
-   `step.csv`. Copy it now. The program overwrites that same file on the next run.
+   `step.csv`, then delete the original so the folder is empty. Do it now. The next run
+   appends to that same file, and a file holding two runs still opens and still looks fine.
 9. Repeat twice more, saving `step2.csv` and `step3.csv`. Sampling is coarse, and the
    repeats tell you how much the reading moves between runs, which is worth a sentence in
    the report.
@@ -348,8 +349,12 @@ that is explicitly called out as going beyond the minimum.
 
 ## Things that go wrong
 
-**Every CSV looks the same.** The program writes to one fixed file name and overwrites it.
-Copy and rename after every single run.
+**Every CSV looks the same.** The program writes to one fixed file name and appends to it.
+Copy, rename and delete the original after every single run.
+
+**The time column restarts partway down the file.** Two or more runs were logged without
+clearing the file in between, so they are stacked in one record. Split it at the restart, or
+redo the run into an empty folder. The analysis expects one step per file.
 
 **The file is empty or has only headers.** Logging was not started before the input was
 applied. Redo that run.

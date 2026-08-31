@@ -438,7 +438,7 @@
     <div class="notice hold">
       <span class="lede">The two rules that never change</span>
       <p><strong>Start logging before you apply the input.</strong> A log that starts after the step is useless, because the analysis needs the flat part in front of it.</p>
-      <p><strong>Copy and rename the file after every single run.</strong> The program writes one fixed name and overwrites it, so an unrenamed run is a lost run.</p>
+      <p><strong>Copy, rename, then delete the original after every single run.</strong> The program writes one fixed name and appends to it, so an unrenamed run gets glued onto the next one and the file still looks valid.</p>
     </div>
   </section>
 
@@ -517,7 +517,9 @@
   <section>
     <div class="title"><span>6</span><h2>If something goes wrong</h2></div>
     <h3>Every CSV looks identical</h3>
-    <p>The program overwrites one fixed file name. Rename after every run. The ones already renamed are fine.</p>
+    <p>The program appends to one fixed file name. Rename after every run and delete the original. The ones already renamed are fine.</p>
+    <h3>The time column restarts partway down the file</h3>
+    <p>Two or more runs were logged without clearing the file in between, so they are stacked in one record. Split it at the restart, or redo the run into an empty folder.</p>
     <h3>The file is empty or has only headings</h3>
     <p>Logging was not running when the input was applied. Redo that run, logging first.</p>
     <h3>The response never settles</h3>

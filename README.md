@@ -14,6 +14,9 @@ m x'' = -b x' - k x + F,      m = 1      ->      G(s) = 1 / (s^2 + b s + k)
 so identifying it means measuring the steady state gain, the damping ratio and the natural
 frequency, then converting those to k and b.
 
+`ASSIGNMENT.md` has what the lab itself asks for: the two stages, the four questions the
+step test has to answer, and what the report is marked on.
+
 ## What the analysis does
 
 From the step log it reads the gain off the final value, the damping ratio off the first
@@ -76,8 +79,9 @@ is unfinished. Build with `pdflatex main.tex` twice, from inside `report/`.
 
 `bench-runbook.md` is the lab-day procedure: what to click, what order, what to write down,
 which frequencies to test and why, and what to check before leaving. Two things in it are
-easy to get wrong and expensive to discover afterwards. The simulator overwrites one fixed
-CSV file name, so every run has to be copied and renamed immediately. And the frequency plan
+easy to get wrong and expensive to discover afterwards. The simulator appends every run to
+one fixed CSV file name, so every run has to be copied, renamed and cleared immediately, or
+runs stack up in one file that still looks valid. And the frequency plan
 has to reach far enough above the corner for the magnitude to reach its asymptote, otherwise
 the roll-off measures near -60 dB per decade rather than -40 and reads as though a second
 order model had failed.
