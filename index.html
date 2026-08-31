@@ -7,29 +7,20 @@
 <title>Suspension Bench Checklist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
 
 <style>
   :root {
-    --paper:      #eef2f6;
-    --panel:      #ffffff;
-    --panel-sunk: #e3eaf1;
-    --ink:        #0f151c;
-    --ink-soft:   #46545f;
-    --rule:       #c3cfda;
-    --accent:     #0f5299;
-    --accent-ink: #ffffff;
-    --warn-bg:    #fdf0d0;
-    --warn-ink:   #6b4600;
-    --warn-rule:  #b98a12;
-    --stop-bg:    #fde4e4;
-    --stop-ink:   #8e1a1a;
-    --stop-rule:  #c14646;
-    --done-bg:    #dcf0e3;
-    --done-ink:   #14562f;
-    --focus:      #b3540d;
+    --paper:   #ffffff;
+    --tint:    #eef1f3;
+    --ink:     #14181c;
+    --ink-mid: #4c565e;
+    --rule:    #c2cad0;
+    --hair:    #dfe4e8;
+    --signal:  #a81f19;
+    --sig-bg:  #f9e7e5;
+    --hold-bg: #f6eecf;
 
-    --step: clamp(1.5rem, 5vw, 2.25rem);
     --sans: "Barlow", ui-sans-serif, sans-serif;
     --cond: "Barlow Condensed", "Barlow", ui-sans-serif, sans-serif;
     --mono: "JetBrains Mono", ui-monospace, monospace;
@@ -37,47 +28,33 @@
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --paper:      #0d1319;
-      --panel:      #151d25;
-      --panel-sunk: #1d2832;
-      --ink:        #e8eef4;
-      --ink-soft:   #a3b2c0;
-      --rule:       #2f3d4a;
-      --accent:     #7cb6f2;
-      --accent-ink: #071019;
-      --warn-bg:    #33270c;
-      --warn-ink:   #ffd980;
-      --warn-rule:  #a98317;
-      --stop-bg:    #3a1414;
-      --stop-ink:   #ffb3b3;
-      --stop-rule:  #b35555;
-      --done-bg:    #12301f;
-      --done-ink:   #96e0b3;
-      --focus:      #ffab5e;
+      --paper:   #101418;
+      --tint:    #1a2026;
+      --ink:     #e7ebef;
+      --ink-mid: #a7b2bb;
+      --rule:    #3b454e;
+      --hair:    #262f37;
+      --signal:  #ff9089;
+      --sig-bg:  #33191a;
+      --hold-bg: #2c2712;
     }
   }
 
   :root[data-theme="dark"] {
-    --paper:      #0d1319;
-    --panel:      #151d25;
-    --panel-sunk: #1d2832;
-    --ink:        #e8eef4;
-    --ink-soft:   #a3b2c0;
-    --rule:       #2f3d4a;
-    --accent:     #7cb6f2;
-    --accent-ink: #071019;
-    --warn-bg:    #33270c;
-    --warn-ink:   #ffd980;
-    --warn-rule:  #a98317;
-    --stop-bg:    #3a1414;
-    --stop-ink:   #ffb3b3;
-    --stop-rule:  #b35555;
-    --done-bg:    #12301f;
-    --done-ink:   #96e0b3;
-    --focus:      #ffab5e;
+    --paper:   #101418;
+    --tint:    #1a2026;
+    --ink:     #e7ebef;
+    --ink-mid: #a7b2bb;
+    --rule:    #3b454e;
+    --hair:    #262f37;
+    --signal:  #ff9089;
+    --sig-bg:  #33191a;
+    --hold-bg: #2c2712;
   }
 
   * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
 
   body {
     margin: 0;
@@ -85,434 +62,366 @@
     color: var(--ink);
     font-family: var(--sans);
     font-size: 1.125rem;
-    line-height: 1.55;
-    -webkit-text-size-adjust: 100%;
+    line-height: 1.5;
   }
 
-  .wrap {
-    max-width: 46rem;
+  .sheet {
+    max-width: 44rem;
     margin: 0 auto;
-    padding: 1rem 1rem 5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    padding: 0 1.1rem 4rem;
   }
 
-  /* ---- masthead ---- */
+  /* masthead */
 
-  header.masthead {
-    display: flex;
-    flex-direction: column;
-    gap: .35rem;
-    padding-top: .75rem;
+  .head {
+    padding: 1.6rem 0 1rem;
+    border-bottom: 3px solid var(--ink);
   }
 
-  .eyebrow {
+  .slug {
     font-family: var(--cond);
     font-weight: 600;
-    font-size: .8125rem;
-    letter-spacing: .12em;
+    font-size: .95rem;
+    letter-spacing: .16em;
     text-transform: uppercase;
-    color: var(--ink-soft);
+    color: var(--ink-mid);
+    margin: 0 0 .3rem;
   }
 
   h1 {
     font-family: var(--cond);
     font-weight: 700;
-    font-size: clamp(1.75rem, 7vw, 2.5rem);
-    line-height: 1.1;
-    letter-spacing: -.01em;
+    font-size: clamp(2rem, 9vw, 3.1rem);
+    line-height: .98;
+    letter-spacing: -.005em;
     margin: 0;
+    text-transform: uppercase;
     text-wrap: balance;
   }
 
-  .standfirst {
-    margin: 0;
-    color: var(--ink-soft);
-    max-width: 34em;
+  .head p {
+    margin: .6rem 0 0;
+    color: var(--ink-mid);
+    max-width: 36em;
   }
 
-  /* ---- sticky counter ---- */
+  /* tally */
 
   .tally {
     position: sticky;
     top: 0;
-    z-index: 5;
-    background: var(--panel);
-    border: 1px solid var(--rule);
-    border-radius: .5rem;
-    padding: .7rem .9rem;
+    z-index: 4;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: .6rem 0;
     display: flex;
     align-items: center;
-    gap: .75rem;
-    box-shadow: 0 2px 10px rgb(0 0 0 / .12);
+    gap: .7rem;
+    flex-wrap: wrap;
   }
 
-  .tally-count {
+  .tally b {
+    font-family: var(--cond);
+    font-weight: 600;
+    font-size: .95rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+
+  .pips { display: flex; gap: 4px; }
+
+  .pips i {
+    width: 15px;
+    height: 20px;
+    border: 1.5px solid var(--rule);
+    background: transparent;
+  }
+
+  .pips i.on { background: var(--ink); border-color: var(--ink); }
+
+  .tally .n {
     font-family: var(--mono);
     font-weight: 600;
-    font-size: 1.25rem;
     font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+    margin-left: auto;
   }
 
-  .tally-label {
-    font-family: var(--cond);
-    text-transform: uppercase;
-    letter-spacing: .09em;
-    font-size: .8125rem;
-    color: var(--ink-soft);
+  /* sections */
+
+  section {
+    padding: 1.6rem 0 .4rem;
+    border-top: 1px solid var(--hair);
   }
 
-  .meter {
-    flex: 1;
-    height: .5rem;
-    background: var(--panel-sunk);
-    border-radius: 999px;
-    overflow: hidden;
-  }
+  section:first-of-type { border-top: 0; }
 
-  .meter > i {
-    display: block;
-    height: 100%;
-    width: 0%;
-    background: var(--accent);
-    transition: width .2s ease;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .meter > i { transition: none; }
-  }
-
-  /* ---- panels ---- */
-
-  section.card {
-    background: var(--panel);
-    border: 1px solid var(--rule);
-    border-radius: .5rem;
-    padding: 1rem;
+  .title {
     display: flex;
-    flex-direction: column;
-    gap: .8rem;
+    align-items: baseline;
+    gap: .7rem;
+    margin-bottom: .7rem;
+  }
+
+  .title span {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--rule);
+    width: 1.6rem;
+    flex: none;
+    font-variant-numeric: tabular-nums;
   }
 
   h2 {
     font-family: var(--cond);
     font-weight: 700;
-    font-size: 1.3rem;
+    font-size: 1.55rem;
+    line-height: 1.1;
+    letter-spacing: .01em;
+    text-transform: uppercase;
     margin: 0;
-    display: flex;
-    align-items: baseline;
-    gap: .55rem;
     text-wrap: balance;
-  }
-
-  h2 .num {
-    font-family: var(--mono);
-    font-size: .875rem;
-    font-weight: 600;
-    color: var(--accent-ink);
-    background: var(--accent);
-    border-radius: .25rem;
-    padding: .1rem .4rem;
-    flex: none;
   }
 
   h3 {
     font-family: var(--cond);
     font-weight: 600;
-    font-size: 1.05rem;
-    margin: .25rem 0 0;
+    font-size: 1.15rem;
+    margin: 1rem 0 .1rem;
   }
 
-  p { margin: 0; }
-  p + p { margin-top: .6rem; }
+  p { margin: 0 0 .7rem; }
+  .mid { color: var(--ink-mid); }
 
-  .muted { color: var(--ink-soft); }
+  code, .mono { font-family: var(--mono); font-size: .875em; }
+  code { background: var(--tint); padding: .05em .3em; }
 
-  code, .mono {
-    font-family: var(--mono);
-    font-size: .9375em;
+  a { color: var(--ink); text-underline-offset: .16em; text-decoration-thickness: 2px; }
+
+  /* notices */
+
+  .notice {
+    background: var(--tint);
+    padding: .9rem 1rem;
+    margin: 0 0 1.2rem;
+    border-top: 2px solid var(--ink);
   }
 
-  code {
-    background: var(--panel-sunk);
-    padding: .1em .35em;
-    border-radius: .25rem;
-  }
+  .notice.stop { background: var(--sig-bg); border-top-color: var(--signal); }
+  .notice.hold { background: var(--hold-bg); }
+  .notice p:last-child { margin-bottom: 0; }
+  .notice code { background: rgb(0 0 0 / .07); }
 
-  /* ---- callouts ---- */
-
-  .note {
-    border-radius: .4rem;
-    padding: .8rem .9rem;
-    border-left: .3rem solid;
-    display: flex;
-    flex-direction: column;
-    gap: .4rem;
-  }
-
-  .note b {
+  .lede {
     font-family: var(--cond);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: .13em;
     text-transform: uppercase;
-    letter-spacing: .08em;
-    font-size: .8125rem;
+    display: block;
+    margin-bottom: .35rem;
   }
 
-  .note.stop { background: var(--stop-bg); color: var(--stop-ink); border-color: var(--stop-rule); }
-  .note.warn { background: var(--warn-bg); color: var(--warn-ink); border-color: var(--warn-rule); }
-  .note.stop code, .note.warn code { background: rgb(0 0 0 / .08); }
+  .notice.stop .lede { color: var(--signal); }
 
-  /* ---- check rows ---- */
+  /* checkable rows */
 
-  ol.steps {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: .3rem;
-  }
+  ol.rows { list-style: none; margin: .2rem 0 .9rem; padding: 0; }
+
+  ol.rows li { border-bottom: 1px solid var(--hair); }
+  ol.rows li:first-child { border-top: 1px solid var(--hair); }
 
   .row {
     display: flex;
+    gap: .85rem;
     align-items: flex-start;
-    gap: .75rem;
-    padding: .55rem .5rem;
-    border-radius: .4rem;
-    min-height: 2.75rem;
+    padding: .7rem .35rem;
+    min-height: 2.9rem;
     cursor: pointer;
-    border: 1px solid transparent;
   }
 
-  .row:hover { background: var(--panel-sunk); }
-  .row:focus-within { outline: 3px solid var(--focus); outline-offset: 1px; }
+  .row:hover { background: var(--tint); }
+  .row:focus-within { outline: 3px solid var(--signal); outline-offset: -3px; }
 
-  .row input[type="checkbox"] {
+  input[type="checkbox"] {
     appearance: none;
     flex: none;
-    width: 1.6rem;
-    height: 1.6rem;
-    margin: .1rem 0 0;
-    border: 2px solid var(--ink-soft);
-    border-radius: .3rem;
-    background: var(--panel);
+    width: 1.55rem;
+    height: 1.55rem;
+    margin: .05rem 0 0;
+    border: 2px solid var(--ink-mid);
+    background: var(--paper);
     cursor: pointer;
     display: grid;
     place-content: center;
   }
 
-  .row input[type="checkbox"]::after {
+  input[type="checkbox"]::after {
     content: "";
-    width: .85rem;
-    height: .45rem;
-    border-left: 3px solid var(--accent-ink);
-    border-bottom: 3px solid var(--accent-ink);
+    width: .8rem;
+    height: .4rem;
+    border-left: 3px solid var(--paper);
+    border-bottom: 3px solid var(--paper);
     transform: rotate(-45deg) translate(1px, -2px);
     opacity: 0;
   }
 
-  .row input[type="checkbox"]:checked {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
+  input[type="checkbox"]:checked { background: var(--ink); border-color: var(--ink); }
+  input[type="checkbox"]:checked::after { opacity: 1; }
+  input[type="checkbox"]:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
 
-  .row input[type="checkbox"]:checked::after { opacity: 1; }
-  .row input[type="checkbox"]:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .what { flex: 1; min-width: 0; }
+  input:checked ~ .what { color: var(--ink-mid); }
+  input:checked ~ .what strong { text-decoration: line-through; }
+  .what small { display: block; color: var(--ink-mid); font-size: .9rem; }
 
-  .row-text { flex: 1; min-width: 0; }
-  .row input:checked ~ .row-text { color: var(--ink-soft); text-decoration: line-through; }
-  .row-text small { display: block; color: var(--ink-soft); font-size: .875rem; text-decoration: none; }
+  /* calculator */
 
-  .tag {
-    display: inline-block;
-    font-family: var(--cond);
-    font-size: .75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .07em;
-    padding: .1rem .4rem;
-    border-radius: .25rem;
-    background: var(--warn-bg);
-    color: var(--warn-ink);
-    border: 1px solid var(--warn-rule);
-    margin-left: .3rem;
-    vertical-align: 2px;
-  }
-
-  .tag.first { background: var(--done-bg); color: var(--done-ink); border-color: currentColor; }
-
-  /* ---- calculator ---- */
-
-  .calc {
-    background: var(--panel-sunk);
-    border-radius: .45rem;
-    padding: .9rem;
-    display: flex;
-    flex-direction: column;
-    gap: .6rem;
-  }
+  .calc { background: var(--tint); padding: 1rem; margin-bottom: 1rem; }
 
   .calc label {
     font-family: var(--cond);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: .12em;
     text-transform: uppercase;
-    letter-spacing: .08em;
-    font-size: .8125rem;
+    display: block;
+    margin-bottom: .5rem;
   }
 
-  .calc-line {
-    display: flex;
-    align-items: center;
-    gap: .6rem;
-    flex-wrap: wrap;
-  }
+  .calc .line { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
 
   input[type="number"] {
     font-family: var(--mono);
-    font-size: 1.125rem;
-    width: 7rem;
-    min-height: 2.75rem;
-    padding: .35rem .6rem;
-    border: 2px solid var(--rule);
-    border-radius: .35rem;
-    background: var(--panel);
+    font-size: 1.15rem;
+    width: 6.5rem;
+    min-height: 2.9rem;
+    padding: .3rem .55rem;
+    border: 2px solid var(--ink);
+    background: var(--paper);
     color: var(--ink);
   }
 
-  input[type="number"]:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; border-color: var(--accent); }
+  input[type="number"]:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
 
-  .result {
+  #wout {
     font-family: var(--mono);
-    font-size: 1.125rem;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
   }
 
-  /* ---- tables ---- */
+  .calc p { margin: .7rem 0 0; }
 
-  .scroll { overflow-x: auto; }
+  /* tables */
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: .9375rem;
-  }
+  .scroll { overflow-x: auto; margin-bottom: 1rem; }
 
-  th, td {
-    text-align: left;
-    padding: .5rem .55rem;
-    border-bottom: 1px solid var(--rule);
-    vertical-align: top;
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 1rem; }
 
   th {
     font-family: var(--cond);
+    font-weight: 600;
+    font-size: .95rem;
+    letter-spacing: .1em;
     text-transform: uppercase;
-    letter-spacing: .07em;
-    font-size: .8125rem;
-    color: var(--ink-soft);
+    color: var(--ink-mid);
+    text-align: left;
     white-space: nowrap;
+    border-bottom: 2px solid var(--ink);
+    padding: .3rem .5rem .3rem 0;
+  }
+
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: .55rem .5rem .55rem 0;
+    border-bottom: 1px solid var(--hair);
   }
 
   td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.done td { color: var(--ink-mid); }
 
-  tr.done td { color: var(--ink-soft); }
-
-  .write-in {
-    display: inline-block;
-    min-width: 5.5rem;
-    border-bottom: 1.5px dashed var(--rule);
+  .first {
+    font-family: var(--cond);
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .85rem;
+    display: block;
+    color: var(--signal);
   }
 
-  /* ---- buttons ---- */
+  .fill { display: inline-block; min-width: 5rem; border-bottom: 1.5px solid var(--rule); }
+
+  /* footer */
+
+  footer { border-top: 3px solid var(--ink); padding-top: 1rem; margin-top: 1.6rem; }
+  footer p { color: var(--ink-mid); font-size: 1rem; }
 
   button {
     font-family: var(--cond);
-    font-weight: 600;
-    font-size: .9375rem;
-    letter-spacing: .04em;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: .1em;
     text-transform: uppercase;
-    min-height: 2.75rem;
-    padding: .5rem 1rem;
-    border-radius: .35rem;
-    border: 2px solid var(--rule);
-    background: var(--panel);
+    min-height: 2.9rem;
+    padding: .45rem 1.1rem;
+    border: 2px solid var(--ink);
+    background: var(--paper);
     color: var(--ink);
     cursor: pointer;
   }
 
-  button:hover { background: var(--panel-sunk); }
-  button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-
-  footer {
-    color: var(--ink-soft);
-    font-size: .9375rem;
-    display: flex;
-    flex-direction: column;
-    gap: .75rem;
-    align-items: flex-start;
-  }
-
-  a {
-    color: var(--accent);
-    text-underline-offset: .15em;
-  }
-
-  a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: .2rem; }
-
-  .sr-only {
-    position: absolute;
-    width: 1px; height: 1px;
-    padding: 0; margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
+  button:hover { background: var(--ink); color: var(--paper); }
+  button:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
 </style>
-
 </head>
 <body>
-<div class="wrap">
 
-  <header class="masthead">
-    <div class="eyebrow">EEE3094S Lab 1 &middot; Control Lab</div>
-    <h1>Suspension Bench Checklist</h1>
-    <p class="standfirst">Eleven logs, about an hour. Tick each one as it lands on the stick. Your ticks are saved on this device, so you can lock the phone between runs.</p>
-  </header>
+<div class="sheet">
+
+  <div class="head">
+    <p class="slug">EEE3094S Lab 1</p>
+    <h1>Suspension bench sheet</h1>
+    <p>Eleven logs, about an hour. Tick each one as it lands on the stick. The ticks are kept on this phone, so you can lock it between runs.</p>
+  </div>
 
   <div class="tally" role="status" aria-live="polite">
-    <span class="tally-count"><span id="done">0</span>/11</span>
-    <span class="tally-label">logs captured</span>
-    <span class="meter" aria-hidden="true"><i id="bar"></i></span>
+    <b>Logs</b>
+    <span class="pips" id="pips" aria-hidden="true"></span>
+    <span class="n"><span id="done">0</span>/11</span>
   </div>
 
-  <div class="note stop">
-    <b>Before anything else</b>
-    <p>Open the student number dropdown and look for <code>LXXTRI004</code>. If it is not there, the simulator generates no system and nothing below works. Photograph the gap between <code>LTSNKU002</code> and <code>LZZALB001</code>, find the staff member on duty, and mail Dr Shield from the lab before you leave.</p>
-  </div>
+  <section>
+    <div class="notice stop">
+      <span class="lede">Check this first</span>
+      <p>Open the student number dropdown and look for <code>LXXTRI004</code>. If it is not there the simulator builds no system and nothing below works. Photograph the gap between <code>LTSNKU002</code> and <code>LZZALB001</code>, find the staff member on duty, and mail Dr Shield from the lab before you leave.</p>
+    </div>
 
-  <div class="note warn">
-    <b>The two rules that never change</b>
-    <p><strong>Start logging before you apply the input.</strong> A log that starts after the step is useless, because the analysis needs the flat part before it.</p>
-    <p><strong>Copy and rename the file after every single run.</strong> The program writes to one fixed name and overwrites it, so an unrenamed run is a lost run.</p>
-  </div>
-
-  <section class="card">
-    <h2><span class="num">0</span> Sign on</h2>
-    <ol class="steps" id="stage0"></ol>
-    <p class="muted">Do not click <strong>Start Step Test</strong>. That steps the height of the plane, not the suspension. The brief warns about this by name.</p>
+    <div class="notice hold">
+      <span class="lede">The two rules that never change</span>
+      <p><strong>Start logging before you apply the input.</strong> A log that starts after the step is useless, because the analysis needs the flat part in front of it.</p>
+      <p><strong>Copy and rename the file after every single run.</strong> The program writes one fixed name and overwrites it, so an unrenamed run is a lost run.</p>
+    </div>
   </section>
 
-  <section class="card">
-    <h2><span class="num">1</span> Step test, three runs</h2>
-    <p>For each run: <strong>Reset Graph</strong>, type <code>1</code> into <strong>Offset Input</strong>, <strong>Start Logging</strong>, then <strong>Apply Input</strong>. Let the trace go visibly flat for longer than feels necessary. The settled value sets your spring coefficient, and everything downstream inherits it.</p>
-    <ol class="steps" id="stage1"></ol>
-    <p class="muted">Copy from <code>C:\F34BSuspensionTestData\F34BSuspensionTestData.csv</code> after each run.</p>
+  <section>
+    <div class="title"><span>0</span><h2>Sign on</h2></div>
+    <ol class="rows" id="stage0"></ol>
+    <p class="mid">Do not click <strong>Start Step Test</strong>. That steps the height of the plane, not the suspension. The brief warns about it by name.</p>
   </section>
 
-  <section class="card">
-    <h2><span class="num">2</span> Read four numbers off the screen</h2>
+  <section>
+    <div class="title"><span>1</span><h2>Step test, three runs</h2></div>
+    <p>Each run: <strong>Reset Graph</strong>, type <code>1</code> into <strong>Offset Input</strong>, <strong>Start Logging</strong>, then <strong>Apply Input</strong>. Let the trace go visibly flat for longer than feels necessary. The settled value sets your spring coefficient and everything downstream inherits it.</p>
+    <ol class="rows" id="stage1"></ol>
+    <p class="mid">Copy from <code>C:\F34BSuspensionTestData\F34BSuspensionTestData.csv</code> after each run.</p>
+  </section>
+
+  <section>
+    <div class="title"><span>2</span><h2>Four numbers off the screen</h2></div>
     <p>While the graph is still up. You cannot recover these later.</p>
     <div class="scroll">
       <table>
@@ -520,63 +429,58 @@
           <tr><th scope="col">What</th><th scope="col">How to read it</th><th scope="col">Yours</th></tr>
         </thead>
         <tbody>
-          <tr><td>Resting level</td><td>Where the trace sat before the step</td><td><span class="write-in"></span></td></tr>
-          <tr><td>Final level</td><td>Where it settles after the step</td><td><span class="write-in"></span></td></tr>
-          <tr><td>Highest point</td><td>Top of the first hump, if there is one</td><td><span class="write-in"></span></td></tr>
-          <tr><td>Hump spacing</td><td>First hump top to second hump top, in seconds</td><td><span class="write-in"></span></td></tr>
+          <tr><td>Resting level</td><td>Where the trace sat before the step</td><td><span class="fill"></span></td></tr>
+          <tr><td>Final level</td><td>Where it settles after the step</td><td><span class="fill"></span></td></tr>
+          <tr><td>Highest point</td><td>Top of the first hump, if there is one</td><td><span class="fill"></span></td></tr>
+          <tr><td>Hump spacing</td><td>First hump top to second hump top, in seconds</td><td><span class="fill"></span></td></tr>
         </tbody>
       </table>
     </div>
-    <div class="note warn">
-      <b>No hump at all?</b>
-      <p>Write "no overshoot". That is a real result, not a failure: it means the system is heavily damped and has real poles. Use <code>W = 1</code> below and spread the frequencies wider, roughly 0.1 to 10 rad/s.</p>
+    <div class="notice hold">
+      <span class="lede">No hump at all</span>
+      <p>Write "no overshoot". That is a real result, not a failure: the system is heavily damped and has real poles. Use <code>W = 1</code> below and spread the frequencies wider, roughly 0.1 to 10 rad/s.</p>
     </div>
   </section>
 
-  <section class="card">
-    <h2><span class="num">3</span> Work out your test frequencies</h2>
+  <section>
+    <div class="title"><span>3</span><h2>Work out the frequencies</h2></div>
     <div class="calc">
-      <label for="tin">Hump spacing T, in seconds</label>
-      <div class="calc-line">
+      <label for="tin">Hump spacing T, seconds</label>
+      <div class="line">
         <input id="tin" type="number" step="0.1" min="0.05" inputmode="decimal" placeholder="3.2">
-        <span class="result" id="wout" aria-live="polite">W will appear here</span>
+        <span id="wout" aria-live="polite">W appears here</span>
       </div>
-      <p class="muted" style="margin:0">W is roughly the frequency the suspension wants to oscillate at, and it sets every sine run below. <code>W = 6.28 / T</code>.</p>
+      <p class="mid">W is roughly the frequency the suspension wants to oscillate at, and it sets every sine run below. <code>W = 6.28 / T</code>.</p>
     </div>
     <div class="scroll">
       <table>
         <thead>
-          <tr>
-            <th scope="col">Tick</th>
-            <th scope="col">Point</th>
-            <th scope="col" class="num">Rads/sec</th>
-            <th scope="col">Save as</th>
-          </tr>
+          <tr><th scope="col">Done</th><th scope="col">Point</th><th scope="col" class="num">Rad/s</th><th scope="col">Save as</th></tr>
         </thead>
         <tbody id="sine"></tbody>
       </table>
     </div>
-    <p class="muted">Amplitude <code>1</code> every time. Let each run go at least ten full cycles: the first few are settling and get discarded.</p>
-    <div class="note warn">
-      <b>If you run short of time</b>
-      <p>The two green runs come first. The peak near W is your best evidence of damping, and the far point at 6W is what keeps the roll-off honest. Measured only between 2W and 4W the slope reads near -60 dB per decade and the report looks like the model failed, when it did not.</p>
+    <p class="mid">Amplitude <code>1</code> every time. Let each run go at least ten full cycles, since the first few are settling and get thrown away.</p>
+    <div class="notice hold">
+      <span class="lede">If you run short of time</span>
+      <p>The two marked runs come first. The peak near W is your best evidence of damping, and the far point at 6W is what keeps the roll-off honest. Measured only between 2W and 4W the slope reads near -60 dB per decade and the report looks like the model failed when it did not.</p>
       <p>Logging is fixed at 100 ms, so anything above about 15 rad/s has too few samples per cycle to fit. If a frequency lands above 15, enter 15 and say in the report that the sampler set the ceiling.</p>
     </div>
   </section>
 
-  <section class="card">
-    <h2><span class="num">4</span> Watch this while they run</h2>
-    <p>Note roughly how big the output swing is at each frequency, and how far behind the input it lags. The swing should grow towards W and shrink after. If it looks biggest between two of your frequencies, run one extra in that gap. That peak is the strongest evidence you will get all day, and an extra log costs three minutes.</p>
-    <p>The lag should grow steadily. About a quarter cycle behind at W, approaching half a cycle far above it.</p>
+  <section>
+    <div class="title"><span>4</span><h2>Watch while they run</h2></div>
+    <p>Note roughly how big the output swing is at each frequency and how far behind the input it lags. The swing should grow towards W and shrink after. If it looks biggest between two of your frequencies, run one extra in that gap: that peak is the strongest evidence you will get all day and an extra log costs three minutes.</p>
+    <p>The lag should grow steadily, about a quarter cycle behind at W and approaching half a cycle far above it.</p>
   </section>
 
-  <section class="card">
-    <h2><span class="num">5</span> Before you leave the room</h2>
-    <ol class="steps" id="stage5"></ol>
+  <section>
+    <div class="title"><span>5</span><h2>Before you leave the room</h2></div>
+    <ol class="rows" id="stage5"></ol>
   </section>
 
-  <section class="card">
-    <h2><span class="num">6</span> If something goes wrong</h2>
+  <section>
+    <div class="title"><span>6</span><h2>If something goes wrong</h2></div>
     <h3>Every CSV looks identical</h3>
     <p>The program overwrites one fixed file name. Rename after every run. The ones already renamed are fine.</p>
     <h3>The file is empty or has only headings</h3>
@@ -588,7 +492,7 @@
   </section>
 
   <footer>
-    <p>Deadline 4 September, one PDF to Gradescope through the LTI link in the Lab 1 folder on Amathuba. The analysis and report steps live in the <a href="https://github.com/TriTacLe/suspension-system-id/blob/master/bench-runbook.md">full runbook</a>.</p>
+    <p>Deadline 4 September, one PDF to Gradescope through the LTI link in the Lab 1 folder on Amathuba. Analysis and report steps are in the <a href="https://github.com/TriTacLe/suspension-system-id/blob/master/bench-runbook.md">full runbook</a>.</p>
     <button id="reset" type="button">Clear all ticks</button>
   </footer>
 
@@ -605,10 +509,10 @@
   }
 
   var stage0 = [
-    ["s0a", "Open the simulator and pick <strong>LXXTRI004</strong> from the dropdown", "Check the list before doing anything else."],
-    ["s0b", "Wait until the panel reads <strong>Ready</strong>", "Your plant is now loaded."],
-    ["s0c", "Click <strong>Laboratory Testing</strong> in the Test Functions box", "Not Start Step Test."],
-    ["s0d", "Click <strong>Show Graph</strong>", "So you can see the response as it happens."]
+    ["s0a", "Open the simulator and pick <strong>LXXTRI004</strong>", "Check the list before doing anything else."],
+    ["s0b", "Wait until the panel reads <strong>Ready</strong>", "Your plant is loaded."],
+    ["s0c", "Click <strong>Laboratory Testing</strong> in Test Functions", "Not Start Step Test."],
+    ["s0d", "Click <strong>Show Graph</strong>", "So you see the response as it happens."]
   ];
 
   var stage1 = [
@@ -619,58 +523,57 @@
 
   var stage5 = [
     ["f1", "Eleven CSV files on the stick", "Three step, eight sine."],
-    ["f2", "Opened one CSV and checked it has three columns with numbers", "Time, input, output displacement. One column means logging was off."],
-    ["f3", "Wrote down the exact column headings as spelled in the file", "The script prints what it found if it cannot match them."],
+    ["f2", "Opened one CSV and checked three columns of numbers", "Time, input, output displacement. One column means logging was off."],
+    ["f3", "Wrote down the column headings exactly as spelled", "The script prints what it found if it cannot match them."],
     ["f4", "Four handwritten numbers, plus the swing and lag notes", ""],
-    ["f5", "Photographed one step graph and one sine graph", "A check that the CSV matches what you actually saw."],
+    ["f5", "Photographed one step graph and one sine graph", "A check that the CSV matches what you saw."],
     ["f6", "Clicked <strong>Stop lab. Testing</strong>", ""]
   ];
 
   var MULTS = [
-    { m: 0.2,  label: "0.2 x W", first: false },
-    { m: 0.5,  label: "0.5 x W", first: false },
-    { m: 0.8,  label: "0.8 x W", first: false },
-    { m: 1.0,  label: "1.0 x W", first: true  },
+    { m: 0.2,  label: "0.2 x W",  first: false },
+    { m: 0.5,  label: "0.5 x W",  first: false },
+    { m: 0.8,  label: "0.8 x W",  first: false },
+    { m: 1.0,  label: "1.0 x W",  first: true  },
     { m: 1.25, label: "1.25 x W", first: false },
-    { m: 2.0,  label: "2 x W",   first: false },
-    { m: 4.0,  label: "4 x W",   first: false },
-    { m: 6.0,  label: "6 x W",   first: true  }
+    { m: 2.0,  label: "2 x W",    first: false },
+    { m: 4.0,  label: "4 x W",    first: false },
+    { m: 6.0,  label: "6 x W",    first: true  }
   ];
 
   function tidy(x) {
-    var s = x.toFixed(2);
-    s = s.replace(/0+$/, "").replace(/\.$/, "");
-    return s;
+    return x.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
   }
 
-  function makeRow(id, html, hint) {
-    var li = document.createElement("li");
-    var label = document.createElement("label");
-    label.className = "row";
-
-    var box = document.createElement("input");
-    box.type = "checkbox";
-    box.checked = !!state[id];
-    box.addEventListener("change", function () {
-      state[id] = box.checked;
+  function box(id, onChange, aria) {
+    var el = document.createElement("input");
+    el.type = "checkbox";
+    el.checked = !!state[id];
+    if (aria) { el.setAttribute("aria-label", aria); }
+    el.addEventListener("change", function () {
+      state[id] = el.checked;
       save();
       tally();
+      onChange(el.checked);
     });
-
-    var text = document.createElement("span");
-    text.className = "row-text";
-    text.innerHTML = html + (hint ? "<small>" + hint + "</small>" : "");
-
-    label.appendChild(box);
-    label.appendChild(text);
-    li.appendChild(label);
-    return li;
+    return el;
   }
 
   function fill(listId, rows) {
     var ol = document.getElementById(listId);
     ol.innerHTML = "";
-    rows.forEach(function (r) { ol.appendChild(makeRow(r[0], r[1], r[2])); });
+    rows.forEach(function (r) {
+      var li = document.createElement("li");
+      var label = document.createElement("label");
+      label.className = "row";
+      var what = document.createElement("span");
+      what.className = "what";
+      what.innerHTML = "<strong>" + r[1] + "</strong>" + (r[2] ? "<small>" + r[2] + "</small>" : "");
+      label.appendChild(box(r[0], function () {}));
+      label.appendChild(what);
+      li.appendChild(label);
+      ol.appendChild(li);
+    });
   }
 
   fill("stage0", stage0);
@@ -685,11 +588,7 @@
     var T = parseFloat(tin.value);
     var W = (T > 0) ? 6.28 / T : null;
 
-    if (W) {
-      wout.textContent = "W = 6.28 / " + tidy(T) + " = " + W.toFixed(2) + " rad/s";
-    } else {
-      wout.textContent = "W will appear here";
-    }
+    wout.textContent = W ? ("W = 6.28 / " + tidy(T) + " = " + W.toFixed(2) + " rad/s") : "W appears here";
 
     sine.innerHTML = "";
 
@@ -699,22 +598,10 @@
       if (state[id]) { tr.className = "done"; }
 
       var tdBox = document.createElement("td");
-      var box = document.createElement("input");
-      box.type = "checkbox";
-      box.checked = !!state[id];
-      box.setAttribute("aria-label", "Sine run at " + p.label + " captured");
-      box.style.width = "1.6rem";
-      box.style.height = "1.6rem";
-      box.addEventListener("change", function () {
-        state[id] = box.checked;
-        save();
-        tally();
-        tr.className = box.checked ? "done" : "";
-      });
-      tdBox.appendChild(box);
+      tdBox.appendChild(box(id, function (on) { tr.className = on ? "done" : ""; }, "Sine run at " + p.label + " captured"));
 
       var tdPoint = document.createElement("td");
-      tdPoint.innerHTML = p.label + (p.first ? "<span class='tag first'>do first</span>" : "");
+      tdPoint.innerHTML = p.label + (p.first ? "<span class='first'>run first</span>" : "");
 
       var tdFreq = document.createElement("td");
       tdFreq.className = "num";
@@ -726,7 +613,7 @@
         var f = W * p.m;
         var capped = f > 15;
         if (capped) { f = 15; }
-        tdFreq.innerHTML = tidy(f) + (capped ? "<span class='tag'>capped</span>" : "");
+        tdFreq.textContent = tidy(f) + (capped ? " (ceiling)" : "");
         tdName.textContent = "sine_" + tidy(f).replace(".", "p") + ".csv";
       } else {
         tdFreq.textContent = "-";
@@ -750,6 +637,9 @@
   if (state.T) { tin.value = state.T; }
   drawSine();
 
+  var pips = document.getElementById("pips");
+  for (var k = 0; k < 11; k++) { pips.appendChild(document.createElement("i")); }
+
   function tally() {
     var ids = ["step1", "step2", "step3"];
     for (var i = 0; i < MULTS.length; i++) { ids.push("sine" + i); }
@@ -758,7 +648,9 @@
     ids.forEach(function (id) { if (state[id]) { n++; } });
 
     document.getElementById("done").textContent = n;
-    document.getElementById("bar").style.width = (n / 11 * 100) + "%";
+    Array.prototype.forEach.call(pips.children, function (el, i) {
+      el.className = i < n ? "on" : "";
+    });
   }
 
   tally();
