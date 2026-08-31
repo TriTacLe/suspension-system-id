@@ -14,6 +14,49 @@ watch a graph, and copy CSV files onto a USB stick.
 
 Due 4 September. One PDF to Gradescope through the LTI link in the Lab 1 folder on Amathuba.
 
+## The whole hour on one screen
+
+| # | Stage | What you do | Files out | Time |
+| --- | --- | --- | --- | --- |
+| 0 | Sign on | Pick LXXTRI004, wait for Ready, click Laboratory Testing | none | 2 min |
+| 1 | Step test | Offset Input `1`, three runs, log before you apply | `step.csv`, `step2.csv`, `step3.csv` | 5 min |
+| 1b | Write down | Resting, final, peak, hump spacing, shape | on paper | 2 min |
+| 1c | Work out W | `W = 6.28 / hump spacing` | on paper | 1 min |
+| 2 | Sine tests | Eight frequencies from `0.2 x W` to `6 x W`, amplitude `1` | eight `sine_*.csv` | 45 min |
+| 3 | Check | Three columns with numbers in one CSV, then stop testing | none | 3 min |
+
+Rules that do not change: **log before you apply**, and **copy and rename the CSV after
+every single run**, because the program overwrites one fixed file name.
+
+```mermaid
+flowchart TD
+    A(["Sign on as LXXTRI004"]) --> B{"Is LXXTRI004<br>in the dropdown?"}
+    B -->|no| X["Photograph the gap<br>Mail Dr Shield from the lab<br>Rebook a slot"]
+    B -->|yes| C["Step test x3<br>Offset Input = 1"]
+    C --> D(["Four numbers on paper"])
+    D --> E{"Did it bounce<br>past the final value?"}
+    E -->|yes| F["Complex poles<br>W from hump spacing"]
+    E -->|no| G["Real poles<br>W = 1, spread wider"]
+    F --> H["Eight sine runs<br>0.2W up to 6W"]
+    G --> H
+    H --> I(["Eleven CSVs on the stick"])
+    I --> J["Run analyse_lab1.py<br>Fill the red gaps<br>Submit to Gradescope"]
+
+    classDef start fill:#4da6ff,color:#000
+    classDef act fill:#7bd88f,color:#000
+    classDef decide fill:#ffc94d,color:#000
+    classDef data fill:#e8eef5,color:#000
+    classDef bad fill:#ff9e9e,color:#000
+    class A start
+    class C,F,G,H,J act
+    class B,E decide
+    class D,I data
+    class X bad
+```
+
+Blue is signing on, amber is a decision, green is something you do, grey is data you carry
+out, red is the fallback if your number is missing.
+
 ## What the experiment actually is
 
 The program simulates the suspension of a jet: a spring and a shock absorber carrying a
@@ -155,6 +198,13 @@ Look at the shape. Nothing else.
 
 Write down which one you saw and the evidence for it, because that sentence is the start of
 your report.
+
+Everything after this point depends on which row you are in:
+
+| What you saw | Poles | What you can get | What to say in the report |
+| --- | --- | --- | --- |
+| Bounced past the final value | Complex pair | Gain, `zeta`, `wn`, both poles | Full second order model |
+| Rose and flattened, no bounce | Real | Gain, dominant pole from the 63 percent point | Propose a reduced first order model and say why |
 
 **3. Where do you estimate the dominant pole or complex pole pair to be?**
 
