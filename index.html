@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Suspension Bench Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+
+<style>
+  :root {
+    --paper:      #eef2f6;
+    --panel:      #ffffff;
+    --panel-sunk: #e3eaf1;
+    --ink:        #0f151c;
+    --ink-soft:   #46545f;
+    --rule:       #c3cfda;
+    --accent:     #0f5299;
+    --accent-ink: #ffffff;
+    --warn-bg:    #fdf0d0;
+    --warn-ink:   #6b4600;
+    --warn-rule:  #b98a12;
+    --stop-bg:    #fde4e4;
+    --stop-ink:   #8e1a1a;
+    --stop-rule:  #c14646;
+    --done-bg:    #dcf0e3;
+    --done-ink:   #14562f;
+    --focus:      #b3540d;
+
+    --step: clamp(1.5rem, 5vw, 2.25rem);
+    --sans: "Barlow", ui-sans-serif, sans-serif;
+    --cond: "Barlow Condensed", "Barlow", ui-sans-serif, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0d1319;
+      --panel:      #151d25;
+      --panel-sunk: #1d2832;
+      --ink:        #e8eef4;
+      --ink-soft:   #a3b2c0;
+      --rule:       #2f3d4a;
+      --accent:     #7cb6f2;
+      --accent-ink: #071019;
+      --warn-bg:    #33270c;
+      --warn-ink:   #ffd980;
+      --warn-rule:  #a98317;
+      --stop-bg:    #3a1414;
+      --stop-ink:   #ffb3b3;
+      --stop-rule:  #b35555;
+      --done-bg:    #12301f;
+      --done-ink:   #96e0b3;
+      --focus:      #ffab5e;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0d1319;
+    --panel:      #151d25;
+    --panel-sunk: #1d2832;
+    --ink:        #e8eef4;
+    --ink-soft:   #a3b2c0;
+    --rule:       #2f3d4a;
+    --accent:     #7cb6f2;
+    --accent-ink: #071019;
+    --warn-bg:    #33270c;
+    --warn-ink:   #ffd980;
+    --warn-rule:  #a98317;
+    --stop-bg:    #3a1414;
+    --stop-ink:   #ffb3b3;
+    --stop-rule:  #b35555;
+    --done-bg:    #12301f;
+    --done-ink:   #96e0b3;
+    --focus:      #ffab5e;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 1.125rem;
+    line-height: 1.55;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wrap {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 1rem 1rem 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* ---- masthead ---- */
+
+  header.masthead {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    padding-top: .75rem;
+  }
+
+  .eyebrow {
+    font-family: var(--cond);
+    font-weight: 600;
+    font-size: .8125rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  h1 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    margin: 0;
+    color: var(--ink-soft);
+    max-width: 34em;
+  }
+
+  /* ---- sticky counter ---- */
+
+  .tally {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: .5rem;
+    padding: .7rem .9rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    box-shadow: 0 2px 10px rgb(0 0 0 / .12);
+  }
+
+  .tally-count {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 1.25rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .tally-label {
+    font-family: var(--cond);
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    font-size: .8125rem;
+    color: var(--ink-soft);
+  }
+
+  .meter {
+    flex: 1;
+    height: .5rem;
+    background: var(--panel-sunk);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .meter > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    transition: width .2s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .meter > i { transition: none; }
+  }
+
+  /* ---- panels ---- */
+
+  section.card {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: .5rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+  }
+
+  h2 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: .55rem;
+    text-wrap: balance;
+  }
+
+  h2 .num {
+    font-family: var(--mono);
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-radius: .25rem;
+    padding: .1rem .4rem;
+    flex: none;
+  }
+
+  h3 {
+    font-family: var(--cond);
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: .25rem 0 0;
+  }
+
+  p { margin: 0; }
+  p + p { margin-top: .6rem; }
+
+  .muted { color: var(--ink-soft); }
+
+  code, .mono {
+    font-family: var(--mono);
+    font-size: .9375em;
+  }
+
+  code {
+    background: var(--panel-sunk);
+    padding: .1em .35em;
+    border-radius: .25rem;
+  }
+
+  /* ---- callouts ---- */
+
+  .note {
+    border-radius: .4rem;
+    padding: .8rem .9rem;
+    border-left: .3rem solid;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+  }
+
+  .note b {
+    font-family: var(--cond);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: .8125rem;
+  }
+
+  .note.stop { background: var(--stop-bg); color: var(--stop-ink); border-color: var(--stop-rule); }
+  .note.warn { background: var(--warn-bg); color: var(--warn-ink); border-color: var(--warn-rule); }
+  .note.stop code, .note.warn code { background: rgb(0 0 0 / .08); }
+
+  /* ---- check rows ---- */
+
+  ol.steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+  }
+
+  .row {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    padding: .55rem .5rem;
+    border-radius: .4rem;
+    min-height: 2.75rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+
+  .row:hover { background: var(--panel-sunk); }
+  .row:focus-within { outline: 3px solid var(--focus); outline-offset: 1px; }
+
+  .row input[type="checkbox"] {
+    appearance: none;
+    flex: none;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: .1rem 0 0;
+    border: 2px solid var(--ink-soft);
+    border-radius: .3rem;
+    background: var(--panel);
+    cursor: pointer;
+    display: grid;
+    place-content: center;
+  }
+
+  .row input[type="checkbox"]::after {
+    content: "";
+    width: .85rem;
+    height: .45rem;
+    border-left: 3px solid var(--accent-ink);
+    border-bottom: 3px solid var(--accent-ink);
+    transform: rotate(-45deg) translate(1px, -2px);
+    opacity: 0;
+  }
+
+  .row input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .row input[type="checkbox"]:checked::after { opacity: 1; }
+  .row input[type="checkbox"]:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  .row-text { flex: 1; min-width: 0; }
+  .row input:checked ~ .row-text { color: var(--ink-soft); text-decoration: line-through; }
+  .row-text small { display: block; color: var(--ink-soft); font-size: .875rem; text-decoration: none; }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--cond);
+    font-size: .75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    padding: .1rem .4rem;
+    border-radius: .25rem;
+    background: var(--warn-bg);
+    color: var(--warn-ink);
+    border: 1px solid var(--warn-rule);
+    margin-left: .3rem;
+    vertical-align: 2px;
+  }
+
+  .tag.first { background: var(--done-bg); color: var(--done-ink); border-color: currentColor; }
+
+  /* ---- calculator ---- */
+
+  .calc {
+    background: var(--panel-sunk);
+    border-radius: .45rem;
+    padding: .9rem;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+  }
+
+  .calc label {
+    font-family: var(--cond);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: .8125rem;
+  }
+
+  .calc-line {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    flex-wrap: wrap;
+  }
+
+  input[type="number"] {
+    font-family: var(--mono);
+    font-size: 1.125rem;
+    width: 7rem;
+    min-height: 2.75rem;
+    padding: .35rem .6rem;
+    border: 2px solid var(--rule);
+    border-radius: .35rem;
+    background: var(--panel);
+    color: var(--ink);
+  }
+
+  input[type="number"]:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; border-color: var(--accent); }
+
+  .result {
+    font-family: var(--mono);
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- tables ---- */
+
+  .scroll { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .9375rem;
+  }
+
+  th, td {
+    text-align: left;
+    padding: .5rem .55rem;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+
+  th {
+    font-family: var(--cond);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    font-size: .8125rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  tr.done td { color: var(--ink-soft); }
+
+  .write-in {
+    display: inline-block;
+    min-width: 5.5rem;
+    border-bottom: 1.5px dashed var(--rule);
+  }
+
+  /* ---- buttons ---- */
+
+  button {
+    font-family: var(--cond);
+    font-weight: 600;
+    font-size: .9375rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    min-height: 2.75rem;
+    padding: .5rem 1rem;
+    border-radius: .35rem;
+    border: 2px solid var(--rule);
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  button:hover { background: var(--panel-sunk); }
+  button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  footer {
+    color: var(--ink-soft);
+    font-size: .9375rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    align-items: flex-start;
+  }
+
+  a {
+    color: var(--accent);
+    text-underline-offset: .15em;
+  }
+
+  a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: .2rem; }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">EEE3094S Lab 1 &middot; Control Lab</div>
+    <h1>Suspension Bench Checklist</h1>
+    <p class="standfirst">Eleven logs, about an hour. Tick each one as it lands on the stick. Your ticks are saved on this device, so you can lock the phone between runs.</p>
+  </header>
+
+  <div class="tally" role="status" aria-live="polite">
+    <span class="tally-count"><span id="done">0</span>/11</span>
+    <span class="tally-label">logs captured</span>
+    <span class="meter" aria-hidden="true"><i id="bar"></i></span>
+  </div>
+
+  <div class="note stop">
+    <b>Before anything else</b>
+    <p>Open the student number dropdown and look for <code>LXXTRI004</code>. If it is not there, the simulator generates no system and nothing below works. Photograph the gap between <code>LTSNKU002</code> and <code>LZZALB001</code>, find the staff member on duty, and mail Dr Shield from the lab before you leave.</p>
+  </div>
+
+  <div class="note warn">
+    <b>The two rules that never change</b>
+    <p><strong>Start logging before you apply the input.</strong> A log that starts after the step is useless, because the analysis needs the flat part before it.</p>
+    <p><strong>Copy and rename the file after every single run.</strong> The program writes to one fixed name and overwrites it, so an unrenamed run is a lost run.</p>
+  </div>
+
+  <section class="card">
+    <h2><span class="num">0</span> Sign on</h2>
+    <ol class="steps" id="stage0"></ol>
+    <p class="muted">Do not click <strong>Start Step Test</strong>. That steps the height of the plane, not the suspension. The brief warns about this by name.</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">1</span> Step test, three runs</h2>
+    <p>For each run: <strong>Reset Graph</strong>, type <code>1</code> into <strong>Offset Input</strong>, <strong>Start Logging</strong>, then <strong>Apply Input</strong>. Let the trace go visibly flat for longer than feels necessary. The settled value sets your spring coefficient, and everything downstream inherits it.</p>
+    <ol class="steps" id="stage1"></ol>
+    <p class="muted">Copy from <code>C:\F34BSuspensionTestData\F34BSuspensionTestData.csv</code> after each run.</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">2</span> Read four numbers off the screen</h2>
+    <p>While the graph is still up. You cannot recover these later.</p>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th scope="col">What</th><th scope="col">How to read it</th><th scope="col">Yours</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Resting level</td><td>Where the trace sat before the step</td><td><span class="write-in"></span></td></tr>
+          <tr><td>Final level</td><td>Where it settles after the step</td><td><span class="write-in"></span></td></tr>
+          <tr><td>Highest point</td><td>Top of the first hump, if there is one</td><td><span class="write-in"></span></td></tr>
+          <tr><td>Hump spacing</td><td>First hump top to second hump top, in seconds</td><td><span class="write-in"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn">
+      <b>No hump at all?</b>
+      <p>Write "no overshoot". That is a real result, not a failure: it means the system is heavily damped and has real poles. Use <code>W = 1</code> below and spread the frequencies wider, roughly 0.1 to 10 rad/s.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">3</span> Work out your test frequencies</h2>
+    <div class="calc">
+      <label for="tin">Hump spacing T, in seconds</label>
+      <div class="calc-line">
+        <input id="tin" type="number" step="0.1" min="0.05" inputmode="decimal" placeholder="3.2">
+        <span class="result" id="wout" aria-live="polite">W will appear here</span>
+      </div>
+      <p class="muted" style="margin:0">W is roughly the frequency the suspension wants to oscillate at, and it sets every sine run below. <code>W = 6.28 / T</code>.</p>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Tick</th>
+            <th scope="col">Point</th>
+            <th scope="col" class="num">Rads/sec</th>
+            <th scope="col">Save as</th>
+          </tr>
+        </thead>
+        <tbody id="sine"></tbody>
+      </table>
+    </div>
+    <p class="muted">Amplitude <code>1</code> every time. Let each run go at least ten full cycles: the first few are settling and get discarded.</p>
+    <div class="note warn">
+      <b>If you run short of time</b>
+      <p>The two green runs come first. The peak near W is your best evidence of damping, and the far point at 6W is what keeps the roll-off honest. Measured only between 2W and 4W the slope reads near -60 dB per decade and the report looks like the model failed, when it did not.</p>
+      <p>Logging is fixed at 100 ms, so anything above about 15 rad/s has too few samples per cycle to fit. If a frequency lands above 15, enter 15 and say in the report that the sampler set the ceiling.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">4</span> Watch this while they run</h2>
+    <p>Note roughly how big the output swing is at each frequency, and how far behind the input it lags. The swing should grow towards W and shrink after. If it looks biggest between two of your frequencies, run one extra in that gap. That peak is the strongest evidence you will get all day, and an extra log costs three minutes.</p>
+    <p>The lag should grow steadily. About a quarter cycle behind at W, approaching half a cycle far above it.</p>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">5</span> Before you leave the room</h2>
+    <ol class="steps" id="stage5"></ol>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">6</span> If something goes wrong</h2>
+    <h3>Every CSV looks identical</h3>
+    <p>The program overwrites one fixed file name. Rename after every run. The ones already renamed are fine.</p>
+    <h3>The file is empty or has only headings</h3>
+    <p>Logging was not running when the input was applied. Redo that run, logging first.</p>
+    <h3>The response never settles</h3>
+    <p>Log for longer. If it still will not settle, use the last part of the record and say in the report exactly what you did.</p>
+    <h3>You signed on as the wrong number</h3>
+    <p>Sign off, sign on as <code>LXXTRI004</code>, redo everything. Data from another plant is worth nothing.</p>
+  </section>
+
+  <footer>
+    <p>Deadline 4 September, one PDF to Gradescope through the LTI link in the Lab 1 folder on Amathuba. The analysis and report steps live in the <a href="https://github.com/TriTacLe/suspension-system-id/blob/master/bench-runbook.md">full runbook</a>.</p>
+    <button id="reset" type="button">Clear all ticks</button>
+  </footer>
+
+</div>
+
+<script>
+  var STORE = "lab1.bench.v1";
+
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(STORE) || "{}") || {}; } catch (e) { state = {}; }
+
+  function save() {
+    try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* private mode, ticks just will not persist */ }
+  }
+
+  var stage0 = [
+    ["s0a", "Open the simulator and pick <strong>LXXTRI004</strong> from the dropdown", "Check the list before doing anything else."],
+    ["s0b", "Wait until the panel reads <strong>Ready</strong>", "Your plant is now loaded."],
+    ["s0c", "Click <strong>Laboratory Testing</strong> in the Test Functions box", "Not Start Step Test."],
+    ["s0d", "Click <strong>Show Graph</strong>", "So you can see the response as it happens."]
+  ];
+
+  var stage1 = [
+    ["step1", "Run 1, save as <span class='mono'>step.csv</span>", "Reset graph, offset 1, log, apply, wait for flat."],
+    ["step2", "Run 2, save as <span class='mono'>step2.csv</span>", "Same again. Repeats give the spread the report quotes."],
+    ["step3", "Run 3, save as <span class='mono'>step3.csv</span>", "Last one."]
+  ];
+
+  var stage5 = [
+    ["f1", "Eleven CSV files on the stick", "Three step, eight sine."],
+    ["f2", "Opened one CSV and checked it has three columns with numbers", "Time, input, output displacement. One column means logging was off."],
+    ["f3", "Wrote down the exact column headings as spelled in the file", "The script prints what it found if it cannot match them."],
+    ["f4", "Four handwritten numbers, plus the swing and lag notes", ""],
+    ["f5", "Photographed one step graph and one sine graph", "A check that the CSV matches what you actually saw."],
+    ["f6", "Clicked <strong>Stop lab. Testing</strong>", ""]
+  ];
+
+  var MULTS = [
+    { m: 0.2,  label: "0.2 x W", first: false },
+    { m: 0.5,  label: "0.5 x W", first: false },
+    { m: 0.8,  label: "0.8 x W", first: false },
+    { m: 1.0,  label: "1.0 x W", first: true  },
+    { m: 1.25, label: "1.25 x W", first: false },
+    { m: 2.0,  label: "2 x W",   first: false },
+    { m: 4.0,  label: "4 x W",   first: false },
+    { m: 6.0,  label: "6 x W",   first: true  }
+  ];
+
+  function tidy(x) {
+    var s = x.toFixed(2);
+    s = s.replace(/0+$/, "").replace(/\.$/, "");
+    return s;
+  }
+
+  function makeRow(id, html, hint) {
+    var li = document.createElement("li");
+    var label = document.createElement("label");
+    label.className = "row";
+
+    var box = document.createElement("input");
+    box.type = "checkbox";
+    box.checked = !!state[id];
+    box.addEventListener("change", function () {
+      state[id] = box.checked;
+      save();
+      tally();
+    });
+
+    var text = document.createElement("span");
+    text.className = "row-text";
+    text.innerHTML = html + (hint ? "<small>" + hint + "</small>" : "");
+
+    label.appendChild(box);
+    label.appendChild(text);
+    li.appendChild(label);
+    return li;
+  }
+
+  function fill(listId, rows) {
+    var ol = document.getElementById(listId);
+    ol.innerHTML = "";
+    rows.forEach(function (r) { ol.appendChild(makeRow(r[0], r[1], r[2])); });
+  }
+
+  fill("stage0", stage0);
+  fill("stage1", stage1);
+  fill("stage5", stage5);
+
+  var tin  = document.getElementById("tin");
+  var wout = document.getElementById("wout");
+  var sine = document.getElementById("sine");
+
+  function drawSine() {
+    var T = parseFloat(tin.value);
+    var W = (T > 0) ? 6.28 / T : null;
+
+    if (W) {
+      wout.textContent = "W = 6.28 / " + tidy(T) + " = " + W.toFixed(2) + " rad/s";
+    } else {
+      wout.textContent = "W will appear here";
+    }
+
+    sine.innerHTML = "";
+
+    MULTS.forEach(function (p, i) {
+      var id = "sine" + i;
+      var tr = document.createElement("tr");
+      if (state[id]) { tr.className = "done"; }
+
+      var tdBox = document.createElement("td");
+      var box = document.createElement("input");
+      box.type = "checkbox";
+      box.checked = !!state[id];
+      box.setAttribute("aria-label", "Sine run at " + p.label + " captured");
+      box.style.width = "1.6rem";
+      box.style.height = "1.6rem";
+      box.addEventListener("change", function () {
+        state[id] = box.checked;
+        save();
+        tally();
+        tr.className = box.checked ? "done" : "";
+      });
+      tdBox.appendChild(box);
+
+      var tdPoint = document.createElement("td");
+      tdPoint.innerHTML = p.label + (p.first ? "<span class='tag first'>do first</span>" : "");
+
+      var tdFreq = document.createElement("td");
+      tdFreq.className = "num";
+
+      var tdName = document.createElement("td");
+      tdName.className = "num";
+
+      if (W) {
+        var f = W * p.m;
+        var capped = f > 15;
+        if (capped) { f = 15; }
+        tdFreq.innerHTML = tidy(f) + (capped ? "<span class='tag'>capped</span>" : "");
+        tdName.textContent = "sine_" + tidy(f).replace(".", "p") + ".csv";
+      } else {
+        tdFreq.textContent = "-";
+        tdName.textContent = "-";
+      }
+
+      tr.appendChild(tdBox);
+      tr.appendChild(tdPoint);
+      tr.appendChild(tdFreq);
+      tr.appendChild(tdName);
+      sine.appendChild(tr);
+    });
+  }
+
+  tin.addEventListener("input", function () {
+    state.T = tin.value;
+    save();
+    drawSine();
+  });
+
+  if (state.T) { tin.value = state.T; }
+  drawSine();
+
+  function tally() {
+    var ids = ["step1", "step2", "step3"];
+    for (var i = 0; i < MULTS.length; i++) { ids.push("sine" + i); }
+
+    var n = 0;
+    ids.forEach(function (id) { if (state[id]) { n++; } });
+
+    document.getElementById("done").textContent = n;
+    document.getElementById("bar").style.width = (n / 11 * 100) + "%";
+  }
+
+  tally();
+
+  document.getElementById("reset").addEventListener("click", function () {
+    if (!confirm("Clear every tick and the hump spacing?")) { return; }
+    state = {};
+    save();
+    tin.value = "";
+    fill("stage0", stage0);
+    fill("stage1", stage1);
+    fill("stage5", stage5);
+    drawSine();
+    tally();
+  });
+</script>
+</body>
+</html>
