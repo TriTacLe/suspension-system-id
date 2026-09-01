@@ -14,9 +14,6 @@ m x'' = -b x' - k x + F,      m = 1      ->      G(s) = 1 / (s^2 + b s + k)
 so identifying it means measuring the steady state gain, the damping ratio and the natural
 frequency, then converting those to k and b.
 
-`ASSIGNMENT.md` has what the lab itself asks for: the two stages, the four questions the
-step test has to answer, and what the report is marked on.
-
 ## What the analysis does
 
 From the step log it reads the gain off the final value, the damping ratio off the first
