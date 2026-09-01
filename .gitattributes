@@ -1,0 +1,3 @@
+# The report is documentation of the analysis, not part of it, so it stays out
+# of the language stats. Without this the LaTeX outweighs the MATLAB it describes.
+report/** linguist-documentation
