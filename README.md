@@ -75,13 +75,11 @@ simulated response against the measured one.
 the bench data is captured are wrapped in `\gap{}` and print in red, so anything still red
 is unfinished. Build with `pdflatex main.tex` twice, from inside `report/`.
 
-## Bench procedure
+## Bench notes
 
-`bench-runbook.md` is the lab-day procedure: what to click, what order, what to write down,
-which frequencies to test and why, and what to check before leaving. Two things in it are
-easy to get wrong and expensive to discover afterwards. The simulator appends every run to
-one fixed CSV file name, so every run has to be copied, renamed and cleared immediately, or
-runs stack up in one file that still looks valid. And the frequency plan
-has to reach far enough above the corner for the magnitude to reach its asymptote, otherwise
-the roll-off measures near -60 dB per decade rather than -40 and reads as though a second
-order model had failed.
+Two things are easy to get wrong on the day and expensive to discover afterwards. The
+simulator appends every run to one fixed CSV file name, so every run has to be copied,
+renamed and cleared immediately, or runs stack up in one file that still looks valid. And
+the frequency plan has to reach far enough above the corner for the magnitude to reach its
+asymptote, otherwise the roll-off measures near -60 dB per decade rather than -40 and reads
+as though a second order model had failed.
