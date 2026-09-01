@@ -41,10 +41,10 @@ RMS magnitude and phase error against the measured frequency points, and prints 
 across repeat step runs so the uncertainty of the method can be told apart from the error
 of the model. Runs at a second input amplitude check that the plant is linear at all.
 
-## Two implementations
+## Running it
 
-`simulate_lab1.m` is the MATLAB one and draws the figures. It needs the Control System
-Toolbox, for `tf` and `step`.
+`simulate_lab1.m` does the whole identification and draws the figures. It needs the Control
+System Toolbox, for `tf` and `step`.
 
 ```
 matlab -batch simulate_lab1
@@ -54,26 +54,13 @@ No arguments. The log folder is set by the `datadir` line at the top of the scri
 resolved relative to the file, so it runs from anywhere. Point it at your own session
 folder.
 
-`analyse_lab1.py` is the Python one, written from the same equations without sharing any
-code. It agrees to four decimal places on every parameter, which is how the arithmetic gets
-checked: the two can disagree about a bug, but not about the plant.
-
-```
-python -m venv .venv
-.venv/bin/pip install numpy matplotlib
-.venv/bin/python analyse_lab1.py step1.csv step2.csv step3.csv --sine-dir . \
-    --amp-step step_amp2.csv
-```
-
-It carries a self-test, worth running before trusting it on real data. The self-test
-generates responses from plants with known k and b and asserts the analysis recovers them,
-in both the underdamped and overdamped cases, along with the frequency readings and two
-alternative CSV header spellings. It also fits a delay of 0 ms to that synthetic data, which
-is what shows a delay fitted to real logs is in the measurements and not invented by the fit.
-
-```
-.venv/bin/python analyse_lab1.py --selftest --outdir /tmp/check
-```
+The arithmetic was checked once against a second implementation written from the same
+equations without sharing any code, which agreed to four decimal places on every parameter.
+That one was in Python and has been removed. Two things it established are worth recording,
+since the code that showed them is gone: the two implementations could disagree about a bug
+but not about the plant, and fitting the delay to synthetic data from a plant with no delay
+returns 0 ms, so a delay fitted to real logs is in the measurements rather than invented by
+the fit.
 
 ## Log naming
 
