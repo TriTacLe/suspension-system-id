@@ -8,6 +8,30 @@
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{xcolor}
+\usepackage{listings}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    keywordstyle=\bfseries,
+    commentstyle=\color{gray},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=10pt,
+    frame=leftline,
+    rulecolor=\color{gray},
+    framexleftmargin=6pt,
+    xleftmargin=22pt,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=b,
+    aboveskip=12pt,
+    belowskip=12pt,
+}
+
+% lets TeX loosen a line rather than run a long \texttt{} token into the margin
+\setlength{\emergencystretch}{2em}
 
 \linespread{1.06}
 \setlength{\parskip}{8pt plus2pt minus2pt}
@@ -16,10 +40,6 @@
 \clubpenalty 10000
 
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
-
-% Marks a value that only exists once the bench data is captured. Anything still
-% red on the day of submission is not finished.
-\newcommand{\gap}[1]{\textcolor{red}{[\textnormal{#1}]}}
 
 \usepackage[hidelinks]{hyperref}
 
@@ -35,12 +55,20 @@
 \input{tex/system_id}
 \input{tex/conclusion}
 
+\section*{References}
+\addcontentsline{toc}{section}{References}
+
+% APA7 hanging indent: first line at the margin, wrapped lines half an inch in.
+\begingroup
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
+
+\hangindent=0.5in \hangafter=1
+T\v{s}oeu, M. S. (2018). \emph{EEE3094S class notes} [Course notes]. University of Cape Town.
+\par
+\endgroup
+
 \appendix
 \include{tex/appendix}
-
-\begin{thebibliography}{9}
-\bibitem{nise} Nise, N. S. (2019). \emph{Control systems engineering} (8th ed.). Wiley.
-\bibitem{braae} Braae, M. (2015). \emph{Control systems engineering notes}. University of Cape Town.
-\end{thebibliography}
 
 \end{document}

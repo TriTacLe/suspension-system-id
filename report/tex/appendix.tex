@@ -2,34 +2,90 @@
 
 \subsection{Analysis script}
 
-All numbers in this report come from \texttt{analyse\_lab1.py}, which reads the CSV files
-the simulator writes and produces every figure in the report. It is invoked as
+The identification was carried out in MATLAB by \texttt{simulate\_lab1.m}, submitted with this
+report and run as \texttt{matlab -batch simulate\_lab1}. It takes no arguments and resolves
+every path against its own location, so it runs from any working directory. It reads the logs
+from \texttt{data/lab-session-2026-08-31/} beside it and writes the figures of this report to
+\texttt{report/figures/}, creating that folder if it is not there. The sine files are named
+\texttt{sine\_<frequency>.csv} so the drive frequency is read off the file name. A trailing \texttt{\_a3} marks a run driven at amplitude
+$3$, held out of the frequency points and used for the linearity check instead.
+Listing~\ref{lst:matlab_out} is the output it produced. Every measured quantity in this report
+is printed there, including the readings taken off the Bode plot by hand. Those are the recovered DC
+gain, both versions of the resonant peak, the phase crossings, the roll-off slopes and the
+excess phase per unit frequency.
 
-\begin{verbatim}
-python analyse_lab1.py step.csv --sine-dir .
-\end{verbatim}
+What is not printed is the arithmetic done on those numbers in the text, such as the error
+bands carried through Equation~\ref{eqn:logdec}, the counterfactual readings used to show
+what a misread peak would have cost, and the resolution figures quoted in millimetres. Those
+are single steps from values that are printed and are shown in place where they are used.
 
-where \texttt{--sine-dir} is the folder holding the sine logs, each named
-\texttt{sine\_<frequency>.csv} so the drive frequency is read from the file name. The script reads the gain from the change in the final value, the damping
-ratio from the first overshoot with the logarithmic decrement as a cross-check, and the
-damped period from the mean spacing of every peak in the record. Amplitude and phase at each
-drive frequency are fitted by least squares against a sinusoid at the known frequency, which
-avoids reading peaks off records sampled at 100~ms. If a response shows no overshoot the
-script instead sweeps $\zeta \geq 1$ and $\omega_n$ for the least squares best fit to the
-analytic overdamped step response, and also reports the reduced first order model taken from
-the 63.2\% point.
+It reads the gain from the change in the final value, the damping ratio from the first
+overshoot with the logarithmic decrement as a cross-check, and the damped period from the
+peaks in the record. Only peaks that clear the final value by at least three times the
+output resolution are counted, since a sample sitting one resolution step above the settled
+value is quantisation noise, not a genuine overshoot, and counting it drags the
+averaged period badly. Where only one peak survives that test, the damped period is taken as
+twice the time to that peak. The logarithmic decrement is read off the first peak and the
+first trough rather than off two peaks, since successive extrema alternate in sign and the
+trough is one decay factor away from the peak while the second peak is two. That is what
+makes the cross-check available at all on this data, where the second peak has already
+fallen under the resolution. Amplitude and phase at each drive frequency are fitted by least
+squares against a sinusoid at the known frequency, which avoids reading peaks off records
+sampled at 100~ms.
 
-The script carries a self-test, run with \texttt{--selftest}, which generates responses from
-a plant with known $k$ and $b$ and checks that the analysis recovers them. It recovers
-$k = 4$ and $b = 0.8$ for the underdamped case and $k = 1$ and $b = 3$ for the overdamped
-case, matches the analytic magnitude and phase at every test frequency, and confirms that
-the gain, damping ratio and natural frequency read back off the synthetic frequency response
-agree with the plant they were generated from. This matters because it separates a mistake
-in the analysis from a genuine feature of the measurements: anything the self-test recovers
-correctly from known data, but gets wrong on the logs, is a property of the suspension and
-not a bug.
+The frequency fits are Gauss-Newton with a numerical Jacobian, started from the step answer,
+and the script runs three. One frees all four parameters and is the independent reading of the
+plant from the frequency points quoted in Section~\ref{sec:system_id}. One repeats that on the
+seven points at or below $2$~rad/s, which is where the gain and the input scaling are
+confirmed. The third holds the delay fixed and fits the remaining three around it, at each of
+the three delays of Table~\ref{tab:refit}. The real against complex pole check is also a search,
+but over a grid of rate pairs with the linear part solved exactly at each. The script also refits every step log in turn, which
+is where the repeatability spread comes from, and compares the $1$~rad/s sinusoid against its
+amplitude $3$ repeat for the linearity check.
+
+The script stops with an error if no peak in the step record clears the resolution, since the
+formulae used here are the underdamped ones and an overdamped record would need a different
+reading. That is not exercised on this data.
+
+\subsection{MATLAB output}
+
+Listing~\ref{lst:matlab_out} is what \texttt{simulate\_lab1.m} prints when it is run on the
+logs, reproduced as it appears in the console. Every identified value quoted in
+Section~\ref{sec:system_id} can be read off it, and the measured against model columns of the
+frequency table are the numbers plotted in Figure~\ref{fig:validation_freq}.
+
+\lstinputlisting[numbers=none,
+                 caption={Console output of \texttt{simulate\_lab1.m} run on the logs of
+                 31 August 2026.},
+                 label=lst:matlab_out]{matlab_output.txt}
+
+\texttt{simulate\_lab1.m} is submitted alongside this report rather than printed in it, since
+it runs to several hundred lines and the console output above is what the numbers are read
+from. Given the logs it repeats the whole identification. It reads the CSV files, identifies
+$A$, $\zeta$ and $\omega_n$ from the step record, fits the transport delay to the phase left
+over from the second order model, builds the transfer function of Equation~\ref{eqn:identified}
+and reports how far the simulation sits from each experiment, $0.24$ dB RMS on magnitude and
+$25.5$ degrees RMS on phase falling to $0.2$ degrees once the delay is included.
 
 \subsection{Raw data}
 
-\gap{List the log files: the step log and one log per frequency, with the step size and the
-drive amplitude used for each.}
+All logs were captured on 31 August 2026 at a 100~ms sample period, and each run was copied
+out and renamed before the next was started, since the simulator appends to a single fixed
+file name.
+
+\begin{itemize}
+    \item \texttt{step1.csv}, \texttt{step2.csv}, \texttt{step3.csv}, a step of $1$~V applied
+          through \textbf{Offset Input}, with all sinusoid fields zero. Three repeats of the
+          same test, logged for $30$, $28$ and $41$~s after the step.
+    \item \texttt{step\_amp2.csv}, the same test with a step of $2$~V, used to check that the
+          response scales linearly with the input.
+    \item \texttt{sine\_0p15.csv} through \texttt{sine\_10p0.csv}, twelve single frequency
+          runs at $0.15$, $0.30$, $0.50$, $0.80$, $1.00$, $1.30$, $2.00$, $3.00$, $4.00$,
+          $6.00$, $8.00$ and $10.0$~rad/s, each at drive amplitude $1$ with zero offset. The
+          three runs below $0.8$~rad/s hold just over three complete cycles and the rest at
+          least five, which leaves the fitted second half of every record well clear of the
+          transient. The file name carries the drive frequency, with \texttt{p} standing in
+          for the decimal point.
+    \item \texttt{sine\_1p0\_a3.csv}, the $1.0$~rad/s run repeated at drive amplitude $3$,
+          used as the frequency domain counterpart of the linearity check.
+\end{itemize}

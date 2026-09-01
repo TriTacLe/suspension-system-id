@@ -1,0 +1,71 @@
+Identified from the step test
+  A = 0.8010 m/V   zeta = 0.6108   wn = 1.0723 rad/s
+  overshoot 0.0886 at Tp = 3.70 s, damped period 7.40 s
+  zeta again 0.6182, from the decay ratio of the 71 and 6 mm extrema
+  k = 1.1498   b = 1.3098   alpha = 0.9210
+  poles -0.6549 +/- 0.8491j
+
+Real or complex poles
+  two real poles fit to 22.2 mm RMS, complex pair to 5.6 mm
+  measured peak stands 71.0 mm above the final value, the real fit reaches 0.0 mm
+
+Repeats and linearity
+             run        A     zeta       wn       Tp    step at      shift
+       step1.csv   0.8010   0.6108   1.0723     3.70      9.5 s      58 ms
+       step2.csv   0.8010   0.6108   1.0723     3.70      5.2 s      58 ms
+       step3.csv   0.8010   0.6108   1.0723     3.70      4.4 s      58 ms
+   step_amp2.csv   0.8010   0.6108   1.0441     3.80      5.2 s      58 ms
+  1 rad/s at amplitude 1: ratio 0.6958, phase -89.71 deg
+  1 rad/s at amplitude 3: ratio 0.6958, phase -89.70 deg
+
+Frequency response
+         w   |G| meas  |G| model    ph meas   ph model
+      0.15      -1.89      -1.89      -10.8      -10.8
+      0.30      -1.78      -1.78      -22.2      -22.1
+      0.50      -1.65      -1.64      -39.2      -38.9
+      0.80      -2.06      -2.04      -69.1      -68.7
+      1.00      -3.15      -3.12      -89.7      -89.3
+      1.30      -5.81      -5.75     -115.5     -115.1
+      2.00     -12.53     -12.47     -149.2     -149.0
+      3.00     -19.60     -19.58     -170.9     -170.8
+      4.00     -24.63     -24.66     -183.8     -183.7
+      6.00     -31.60     -31.77     -202.1     -202.0
+      8.00     -36.43     -36.80     -216.8     -216.9
+     10.00     -39.99     -40.69     -230.1     -230.4
+  magnitude 0.24 dB RMS
+  fitted transport delay 101.1 ms
+  phase 25.5 deg RMS without it, 0.2 deg RMS with it
+Read off the frequency response
+         w       lift   |G| meas  implied A
+      0.15      0.48%     0.8049     0.8010
+      0.30      1.73%     0.8149     0.8010
+      0.50      3.32%     0.8274     0.8008
+  peak 0.8274 at 0.50 rad/s over 0.8049: Mr 1.0279, zeta 0.6199, wn 1.039 rad/s
+  peak 0.8274 at 0.50 rad/s over 0.8010: Mr 1.0329, zeta 0.6122, wn 0.999 rad/s
+  phase crosses -90 deg at 1.003 rad/s measured, 1.072 model, 1.007 with the delay
+  slope over the 5 points above 2 wn: -39.1 dB/decade measured, -40.4 model
+    model local slope at 1.00 wn: -20.0 dB/decade
+    model local slope at 1.50 wn: -36.5 dB/decade
+    model local slope at 2.00 wn: -40.0 dB/decade
+    model local slope at 9.33 wn: -40.1 dB/decade
+    excess phase at 0.15 rad/s: 6.18 deg per rad/s
+    excess phase at 1.00 rad/s: 6.23 deg per rad/s
+    excess phase at 10.00 rad/s: 5.76 deg per rad/s
+
+  fitted to these points alone, using no step data:
+    A 0.8143 m/V  zeta 0.6115  wn 1.0674 rad/s  T 100.8 ms  alpha 0.9278
+    below 2 rad/s, where the gain is the only thing measured:
+    A 0.8017 m/V  zeta 0.6114  wn 1.0674 rad/s  T 101.1 ms  alpha 0.9134
+  refitted with the delay held fixed:
+      T [ms]     zeta       wn    mag RMS     ph RMS
+           0    0.397    0.966     1.81 dB     22.9 deg
+          58    0.497    1.013     0.99 dB      9.5 deg
+         101    0.612    1.068     0.23 dB      0.1 deg
+
+Step response
+  step of 1.00 V at t = 9.5 s
+  RMS error 0.00557 m over 305 samples
+  worst residual -23.9 mm at 1.2 s
+  best time shift 58 ms, which takes the RMS to 0.32 mm
+  worst sample after the shift 1.9 mm, largest overshoot the other way 3.1 mm
+

@@ -26,11 +26,11 @@ fprintf('  k = %.4f   b = %.4f   alpha = %.4f\n', k, b, alpha);
 fprintf('  poles %.4f +/- %.4fj\n\n', -zeta*wn, wn*sqrt(1-zeta^2));
 
 two_exponential_check(steplog, zeta, wn);
-repeats_check(datadir);
 
 G = tf(alpha, [1 b k]);
 
-plot_input(steplog, outdir);
+repeats_check(G, datadir);
+
 plot_step(steplog, outdir);
 frequency_check(G, datadir, outdir);
 step_check(G, steplog, outdir);
@@ -52,8 +52,7 @@ dy = yinf - y0;
 resp = y(i0:end) - y0;
 tr = t(i0:end) - t(i0);
 
-% One sample above the final value is quantisation noise, not a peak, and
-% counting it wrecks the averaged period. Require several resolution steps.
+% Require several resolution steps; one sample above the final value is noise.
 levels = unique(y);
 resolution = min(diff(levels));
 [peaks, troughs] = turning_points(resp);
@@ -68,8 +67,7 @@ overshoot = (resp(peaks(1)) - dy) / dy;
 ln = log(overshoot);
 zeta = -ln / sqrt(pi^2 + ln^2);
 
-% Average over the peaks when there are several. With only one, the time to
-% it is half a damped period and that is all the timing there is.
+% Average over the peaks. A single peak still gives half a damped period.
 if numel(peaks) >= 2
     period = mean(diff(tr(peaks)));
 else
@@ -133,16 +131,21 @@ fprintf('  measured peak stands %.1f mm above the final value, the real fit reac
 end
 
 
-function repeats_check(datadir)
-% The repeats say how much of the model error is measurement noise. The runs
-% driven harder say whether the plant is linear, which everything here assumes.
+function repeats_check(G, datadir)
+% Repeats: measurement noise. Harder runs: linearity. The shift column checks
+% whether the step onset lands between samples.
 
 runs = {'step1.csv', 'step2.csv', 'step3.csv', 'step_amp2.csv'};
 fprintf('Repeats and linearity\n');
-fprintf('  %14s %8s %8s %8s %8s\n', 'run', 'A', 'zeta', 'wn', 'Tp');
+fprintf('  %14s %8s %8s %8s %8s %10s %10s\n', ...
+        'run', 'A', 'zeta', 'wn', 'Tp', 'step at', 'shift');
 for n = 1:numel(runs)
-    [A, zeta, wn, Tp] = identify_step(fullfile(datadir, runs{n}));
-    fprintf('  %14s %8.4f %8.4f %8.4f %8.2f\n', runs{n}, A, zeta, wn, Tp);
+    path = fullfile(datadir, runs{n});
+    [A, zeta, wn, Tp] = identify_step(path);
+    [t, u] = read_log(path);
+    shift = best_shift(G, path);
+    fprintf('  %14s %8.4f %8.4f %8.4f %8.2f %8.1f s %7.0f ms\n', ...
+            runs{n}, A, zeta, wn, Tp, t(step_index(u)), 1000*shift);
 end
 
 % A linear plant scales its output with the input and leaves the ratio and
@@ -180,22 +183,8 @@ troughs = idx(flips(ss(flips) < 0)) + 1;
 end
 
 
-function plot_input(path, outdir)
-% The input as applied, so the step the analysis reads is on the record.
-
-[t, u, ~] = read_log(path);
-
-fig = figure('Visible', 'off', 'Position', [0 0 900 450]);
-plot(t, u, 'LineWidth', 2, 'Color', [0.17 0.24 0.44]);
-xlabel('Time [s]'); ylabel('Input [V]');
-title('Applied input');
-ylim([-0.15 1.35]); grid on;
-save_figure(fig, outdir, 'input_step.png');
-end
-
-
 function plot_step(path, outdir)
-% The measured step, with the baseline, the final value and the step marked.
+% The measured step, with the features the analysis reads labelled.
 
 [t, u, y] = read_log(path);
 i0 = step_index(u);
@@ -204,16 +193,72 @@ y0 = mean(y(1:i0-1));
 yinf = mean(y(end-tail+1:end));
 tstep = t(i0);
 
+resp = y(i0:end);
+[ypeak, ipeak] = max(resp);
+tpeak = t(i0 + ipeak - 1);
+
 fig = figure('Visible', 'off', 'Position', [0 0 950 600]);
 plot(t, y, 'LineWidth', 2, 'Color', [0.17 0.24 0.44]); hold on;
 yline(y0, ':', 'Color', [0.7 0.1 0.1]);
 yline(yinf, '--', 'Color', [0.7 0.1 0.1]);
 xline(tstep, ':', 'Color', [0.35 0.35 0.35]);
+plot(tpeak, ypeak, 'v', 'MarkerSize', 8, 'MarkerFaceColor', [0.7 0.1 0.1], ...
+     'MarkerEdgeColor', 'none');
 
+% The marking guide asks for the points of interest labelled on the graph, and
+% the worked example in the brief puts the value next to each one.
+span = ypeak + 0.06*(ypeak - y0);
+plot([tstep tpeak], [span span], '-', 'LineWidth', 1.2, 'Color', [0.35 0.35 0.35]);
+plot([tstep tstep], span + [-1 1]*0.015*(ypeak - y0), '-', 'Color', [0.35 0.35 0.35]);
+plot([tpeak tpeak], span + [-1 1]*0.015*(ypeak - y0), '-', 'Color', [0.35 0.35 0.35]);
+text(mean([tstep tpeak]), span, sprintf('T_p = %.2f s', tpeak - tstep), ...
+     'Color', [0.35 0.35 0.35], 'FontSize', 11, ...
+     'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+
+% Overshoot drawn as the span it measures, from the settled value to the peak.
+plot([tpeak tpeak], [yinf ypeak], '-', 'LineWidth', 1.2, 'Color', [0.7 0.1 0.1]);
+text(tpeak, mean([yinf ypeak]), sprintf('  OS = %.0f mm', 1000*(ypeak - yinf)), ...
+     'Color', [0.7 0.1 0.1], 'FontSize', 11);
+% Gain drawn as the span between the levels, left of the step where it is flat.
+tgain = tstep - 0.45*(tstep - t(1));
+plot([tgain tgain], [y0 yinf], '-', 'LineWidth', 1.2, 'Color', [0.1 0.4 0.2]);
+cap = 0.025*(tstep + 20 - t(1));
+plot(tgain + [-1 1]*cap, [y0 y0], '-', 'LineWidth', 1.2, 'Color', [0.1 0.4 0.2]);
+plot(tgain + [-1 1]*cap, [yinf yinf], '-', 'LineWidth', 1.2, 'Color', [0.1 0.4 0.2]);
+text(tgain, mean([y0 yinf]), sprintf(' A = %.3f m/V', yinf - y0), ...
+     'Color', [0.1 0.4 0.2], 'FontSize', 11);
+
+tend = tstep + 20;
+text(tend, y0, sprintf(' x_0 = %.3f m', y0), 'Color', [0.7 0.1 0.1], ...
+     'FontSize', 11, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'bottom');
+text(tend, yinf, sprintf(' x_\\infty = %.3f m', yinf), 'Color', [0.7 0.1 0.1], ...
+     'FontSize', 11, 'HorizontalAlignment', 'right', 'VerticalAlignment', 'top');
+
+% Stop at 20 s; past that the trace is flat to the resolution.
+xlim([t(1) tend]);
+ylim([y0 - 0.04*(ypeak - y0), span + 0.10*(ypeak - y0)]);
 xlabel('Time [s]'); ylabel('Displacement [m]');
 title('Measured step response');
-legend('measured displacement', 'Location', 'southeast');
 grid on;
+
+% The 6 mm undershoot vanishes on a 0.9 m axis; it gets an inset.
+[trough, itrough] = min(resp(ipeak:end));
+ttrough = t(i0 + ipeak + itrough - 2);
+inset = axes('Position', [0.53 0.30 0.34 0.30]);
+plot(inset, t, 1000*(y - yinf), 'LineWidth', 1.6, 'Color', [0.17 0.24 0.44]);
+hold(inset, 'on');
+yline(inset, 0, '--', 'Color', [0.7 0.1 0.1]);
+plot(inset, [ttrough ttrough], [0 1000*(trough - yinf)], '-', ...
+     'LineWidth', 1.2, 'Color', [0.7 0.1 0.1]);
+text(ttrough, 500*(trough - yinf), sprintf('  %.0f mm', 1000*(yinf - trough)), ...
+     'Parent', inset, 'Color', [0.7 0.1 0.1], 'FontSize', 10);
+xlim(inset, [tpeak, tpeak + 8]);
+ylim(inset, [1000*(trough - yinf) - 3, 4]);
+xlabel(inset, 'Time [s]'); ylabel(inset, 'x - x_\infty [mm]');
+title(inset, 'Undershoot, second reading of \zeta', 'FontSize', 10);
+grid(inset, 'on');
+box(inset, 'on');
+
 save_figure(fig, outdir, 'step_response.png');
 end
 
@@ -230,18 +275,7 @@ model = y(1) + du * step(G, tr);
 resid = 1000 * (y(i0:end) - model);
 rms = sqrt(mean((y(i0:end) - model).^2));
 
-% The model runs early by about one sample. Shifting it later is the time
-% domain view of the delay the frequency test finds.
-shifts = 0:0.001:0.3;
-bestrms = Inf;
-for n = 1:numel(shifts)
-    shifted = interp1(tr, model, tr - shifts(n), 'linear', y(1));
-    err = sqrt(mean((y(i0:end) - shifted).^2));
-    if err < bestrms
-        bestrms = err;
-        bestshift = shifts(n);
-    end
-end
+[bestshift, bestrms] = best_shift(G, path);
 shiftresid = 1000 * (y(i0:end) - interp1(tr, model, tr - bestshift, 'linear', y(1)));
 
 [worst, iworst] = max(abs(resid));
@@ -250,6 +284,9 @@ worst = resid(iworst);
 levels = unique(y);
 resolution = 1000 * min(diff(levels));
 
+% Same 20 s window as the step figure; past that both traces are flat.
+tend = 20;
+
 fig = figure('Visible', 'off', 'Position', [0 0 950 700]);
 subplot(2,1,1);
 plot(tr, y(i0:end), 'LineWidth', 2, 'Color', [0.17 0.24 0.44]); hold on;
@@ -257,16 +294,24 @@ plot(tr, model, '--', 'LineWidth', 1.8, 'Color', [0.7 0.1 0.1]);
 ylabel('Displacement [m]');
 title('Simulated against measured step response');
 legend('measured', 'identified model', 'Location', 'southeast');
+xlim([0 tend]);
 grid on;
 
 subplot(2,1,2);
-patch([0 max(tr) max(tr) 0], [-resolution -resolution resolution resolution], ...
+patch([0 tend tend 0], [-resolution -resolution resolution resolution], ...
       [0.85 0.85 0.85], 'EdgeColor', 'none'); hold on;
 plot(tr, resid, 'LineWidth', 1.6, 'Color', [0.17 0.24 0.44]);
 plot(tr, shiftresid, '--', 'LineWidth', 1.4, 'Color', [0.1 0.5 0.2]);
+
+% Mark the worst residual; the report quotes it.
+plot(tr(iworst), worst, 'o', 'MarkerSize', 9, 'LineWidth', 1.5, 'Color', [0.7 0.1 0.1]);
+text(tr(iworst), worst, sprintf('  %.1f mm at %.1f s', worst, tr(iworst)), ...
+     'Color', [0.7 0.1 0.1], 'FontSize', 11, 'VerticalAlignment', 'middle');
+
 xlabel('Time since the step [s]'); ylabel('Residual [mm]');
 legend('logger resolution', 'measured - model', ...
        sprintf('model shifted %.0f ms later', 1000*bestshift), 'Location', 'southeast');
+xlim([0 tend]);
 grid on;
 save_figure(fig, outdir, 'validation_step.png');
 
@@ -274,8 +319,113 @@ fprintf('Step response\n');
 fprintf('  step of %.2f V at t = %.1f s\n', du, t(i0));
 fprintf('  RMS error %.5f m over %d samples\n', rms, numel(tr));
 fprintf('  worst residual %.1f mm at %.1f s\n', worst, tr(iworst));
-fprintf('  best time shift %.0f ms, which takes the RMS to %.2f mm\n\n', ...
+fprintf('  best time shift %.0f ms, which takes the RMS to %.2f mm\n', ...
         1000*bestshift, 1000*bestrms);
+fprintf('  worst sample after the shift %.1f mm, largest overshoot the other way %.1f mm\n\n', ...
+        max(abs(shiftresid)), max(resid));
+end
+
+
+function frequency_features(G, Gd, w, magdb, phase, mp)
+% The readings the report takes off the Bode plot by hand: the DC gain the
+% low frequency points imply, the damping ratio from the resonant peak, the
+% phase crossings and the high frequency slope.
+
+den = G.Denominator{1};
+A = G.Numerator{1}(end)/den(end);
+zeta = den(2)/(2*sqrt(den(3)));
+wn = sqrt(den(3));
+
+fprintf('Read off the frequency response\n');
+
+% Each low point sits above DC by a known lift; dividing it out recovers
+% what the run would read at zero frequency.
+low = w <= 0.5;
+r = w(low)/wn;
+lift = 1 ./ sqrt((1 - r.^2).^2 + (2*zeta*r).^2);
+amp = 10.^(magdb/20);
+fprintf('  %8s %10s %10s %10s\n', 'w', 'lift', '|G| meas', 'implied A');
+for n = find(low)
+    fprintf('  %8.2f %9.2f%% %10.4f %10.4f\n', ...
+            w(n), 100*(lift(n) - 1), amp(n), amp(n)/lift(n));
+end
+
+% Resonant peak. Which gain it is measured against decides whether the
+% reading is independent of the step test, so both are given.
+[peak, ipeak] = max(amp);
+adc = amp(1)/lift(1);
+for ref = [amp(1), adc]
+    mr = peak/ref;
+    z = sqrt((1 - sqrt(1 - 1/mr^2))/2);
+    fprintf('  peak %.4f at %.2f rad/s over %.4f: Mr %.4f, zeta %.4f, wn %.3f rad/s\n', ...
+            peak, w(ipeak), ref, mr, z, w(ipeak)/sqrt(1 - 2*z^2));
+end
+
+fprintf('  phase crosses -90 deg at %.3f rad/s measured, %.3f model, %.3f with the delay\n', ...
+        cross90(w, phase), crossing_of(G), crossing_of(Gd));
+
+% Slope over the points well above the corner, against the model on the same
+% points and against the model's own local slope on the way out to them.
+top = w > 2*wn;
+fprintf('  slope over the %d points above 2 wn: %.1f dB/decade measured, %.1f model\n', ...
+        sum(top), slope(w(top), magdb(top)), slope(w(top), bode_at(G, w(top))));
+for f = [1 1.5 2 9.33]
+    fprintf('    model local slope at %.2f wn: %.1f dB/decade\n', f, ...
+            slope(f*wn*[0.99 1.01], bode_at(G, f*wn*[0.99 1.01])));
+end
+
+% A pure delay is a constant number of degrees per rad/s. This one is not
+% quite constant, which is the qualification the report makes.
+excess = mp - phase;
+for n = [1, find(abs(w - wn) == min(abs(w - wn)), 1), numel(w)]
+    fprintf('    excess phase at %.2f rad/s: %.2f deg per rad/s\n', ...
+            w(n), excess(n)/w(n));
+end
+fprintf('\n');
+end
+
+
+function s = slope(w, magdb)
+% dB per decade through the points, by least squares on log frequency.
+p = polyfit(log10(w(:)), magdb(:), 1);
+s = p(1);
+end
+
+
+function wc = cross90(w, phase)
+% Where the phase passes -90 degrees, interpolated between the two points
+% either side of it.
+wc = interp1(phase, w, -90);
+end
+
+
+function wc = crossing_of(sys)
+% Same crossing for a model, found on a fine grid rather than between points.
+grid = logspace(-1, 1.2, 4000);
+[~, p] = bode_at(sys, grid);
+wc = interp1(p, grid, -90);
+end
+
+
+function [bestshift, bestrms] = best_shift(G, path)
+% The pure time shift that fits the model to a step log best.
+
+[t, u, y] = read_log(path);
+i0 = step_index(u);
+tr = t(i0:end) - t(i0);
+model = y(1) + (u(end) - u(1)) * step(G, tr);
+
+shifts = 0:0.001:0.3;
+bestrms = Inf;
+bestshift = 0;
+for n = 1:numel(shifts)
+    shifted = interp1(tr, model, tr - shifts(n), 'linear', y(1));
+    err = sqrt(mean((y(i0:end) - shifted).^2));
+    if err < bestrms
+        bestrms = err;
+        bestshift = shifts(n);
+    end
+end
 end
 
 
@@ -300,9 +450,7 @@ phase = phase(order);
 
 [mm, mp] = bode_at(G, w);
 
-% Second order cannot lag past 180 degrees, so the extra phase is either a
-% third pole or a delay. A pole would bend the magnitude too; a delay fits
-% -w*T and leaves it alone.
+% The excess phase fits -w*T; a pole would bend the magnitude too.
 excess = (phase - mp) * pi/180;
 T = -sum(excess .* w) / sum(w .* w);
 Gd = tf(G.Numerator{1}, G.Denominator{1}, 'InputDelay', T);
@@ -320,8 +468,9 @@ fprintf('  fitted transport delay %.1f ms\n', 1000*T);
 fprintf('  phase %.1f deg RMS without it, %.1f deg RMS with it\n', ...
         sqrt(mean((phase - mp).^2)), sqrt(mean((phase - mpd).^2)));
 
-% The same four parameters from these points alone. The step answer only sets
-% where the search starts, so this is a separate reading, not a restatement.
+frequency_features(G, Gd, w, magdb, phase, mp);
+
+% Fit all four from these points alone; the step answer only seeds the search.
 den = G.Denominator{1};
 guess = [G.Numerator{1}(end)/den(end), den(2)/(2*sqrt(den(3))), sqrt(den(3)), 0.1];
 wide = fit_frequency(w, magdb, phase, guess, 4);
@@ -334,7 +483,7 @@ fprintf('    below 2 rad/s, where the gain is the only thing measured:\n');
 fprintf('    A %.4f m/V  zeta %.4f  wn %.4f rad/s  T %.1f ms  alpha %.4f\n', ...
         low(1), low(2), low(3), 1000*low(4), low(1)*low(3)^2);
 
-% The same fit with the delay held fixed, to show what naming it is worth.
+% Same fit with the delay pinned at each candidate value.
 fprintf('  refitted with the delay held fixed:\n');
 fprintf('    %8s %8s %8s %10s %10s\n', 'T [ms]', 'zeta', 'wn', 'mag RMS', 'ph RMS');
 for held = [0 0.058 T]
@@ -348,7 +497,8 @@ for held = [0 0.058 T]
 end
 fprintf('\n');
 
-grid_w = logspace(log10(min(w)/5), log10(max(w)*5), 400);
+% Only a little past the measured points, or the data gets squashed.
+grid_w = logspace(log10(min(w)/1.5), log10(max(w)*1.5), 400);
 [gm, gp] = bode_at(G, grid_w);
 [~, gpd] = bode_at(Gd, grid_w);
 
@@ -357,10 +507,22 @@ subplot(2,1,1);
 semilogx(grid_w, gm, 'LineWidth', 1.6, 'Color', [0.3 0.3 0.3]); hold on;
 semilogx(w, magdb, 'o', 'MarkerSize', 7, 'MarkerFaceColor', [0.17 0.24 0.44], ...
          'MarkerEdgeColor', 'none');
-xline(sqrt(G.Denominator{1}(3)), '--', 'Color', [0.7 0.1 0.1]);
+wn = sqrt(G.Denominator{1}(3));
+xline(wn, '--', 'Color', [0.7 0.1 0.1]);
 ylabel('Magnitude [dB]'); grid on;
 title('Measured frequency response');
 legend('identified model', 'measured', 'Location', 'southwest');
+
+% Same as the step figure: the marking guide asks for these on the graph.
+% The extra headroom is so the peak label has somewhere to sit.
+[mpeak, ipeak] = max(magdb);
+ylim([min(gm) - 2, mpeak + 8]);
+text(wn, min(magdb), sprintf(' \\omega_n = %.2f rad/s', wn), ...
+     'Color', [0.7 0.1 0.1], 'FontSize', 11, 'VerticalAlignment', 'bottom');
+
+% Peak labelled as the ratio to the lowest measured point, as in the report.
+text(w(ipeak), mpeak, sprintf(' M_r = %.3f', 10^((mpeak - magdb(1))/20)), ...
+     'Color', [0.7 0.1 0.1], 'FontSize', 11, 'VerticalAlignment', 'bottom');
 
 subplot(2,1,2);
 semilogx(grid_w, gp, 'LineWidth', 1.6, 'Color', [0.3 0.3 0.3]); hold on;
@@ -369,18 +531,40 @@ semilogx(w, phase, 'o', 'MarkerSize', 7, 'MarkerFaceColor', [0.17 0.24 0.44], ..
          'MarkerEdgeColor', 'none');
 yline(-90, ':', 'Color', [0.7 0.1 0.1]);
 yline(-180, ':', 'Color', [0.5 0.5 0.5]);
+% Bound by the measurements, not by where the delayed model runs off.
+ylim([min(phase) - 25, 5]);
+
+% Mark the -90 crossing with both frequencies; the gap is the delay argument.
+w90 = cross90(w, phase);
+semilogx(w90, -90, 'p', 'MarkerSize', 14, 'MarkerFaceColor', [0.7 0.1 0.1], ...
+         'MarkerEdgeColor', 'none');
+text(w90, -103, sprintf('  measured at %.2f rad/s, \\omega_n = %.2f', w90, wn), ...
+     'Color', [0.7 0.1 0.1], 'FontSize', 11);
+
+text(grid_w(1), -180, ' -180^\circ limit', 'Color', [0.4 0.4 0.4], ...
+     'FontSize', 11, 'VerticalAlignment', 'bottom');
 xlabel('Frequency [rad/s]'); ylabel('Phase [deg]'); grid on;
 legend('identified model', sprintf('with %.0f ms delay', 1000*T), 'measured', ...
        'Location', 'southwest');
 save_figure(fig, outdir, 'bode_plot.png');
 
 fig = figure('Visible', 'off', 'Position', [0 0 950 700]);
+% Draw the RMS magnitude error as a band the points can be read against.
+magerr = magdb - mm;
+magrms = sqrt(mean(magerr.^2));
+
 subplot(2,1,1);
-semilogx(w, magdb - mm, 'o-', 'LineWidth', 1.4, 'MarkerSize', 6, ...
-         'Color', [0.17 0.24 0.44], 'MarkerFaceColor', [0.17 0.24 0.44]); hold on;
+patch([min(w) max(w) max(w) min(w)], [-magrms -magrms magrms magrms], ...
+      [0.87 0.87 0.87], 'EdgeColor', 'none'); hold on;
+set(gca, 'XScale', 'log');
+semilogx(w, magerr, 'o-', 'LineWidth', 1.4, 'MarkerSize', 6, ...
+         'Color', [0.17 0.24 0.44], 'MarkerFaceColor', [0.17 0.24 0.44]);
 yline(0, ':', 'Color', [0.5 0.5 0.5]);
+text(min(w), magrms, sprintf('  %.2f dB RMS', magrms), 'FontSize', 11, ...
+     'Color', [0.35 0.35 0.35], 'VerticalAlignment', 'bottom');
 ylabel('Magnitude error [dB]'); grid on;
 title('Model against the measured frequency points');
+legend('RMS band', 'measured - model', 'Location', 'southwest');
 
 subplot(2,1,2);
 semilogx(w, phase - mp, 'o-', 'LineWidth', 1.4, 'MarkerSize', 6, ...
@@ -430,7 +614,6 @@ end
 
 
 function [magdb, phasedeg] = bode_at(sys, w)
-% Magnitude in dB and phase in degrees at the given frequencies.
 
 % .' not ', since ' conjugates and would flip the sign of every phase
 h = squeeze(freqresp(sys, w));
@@ -462,7 +645,6 @@ end
 
 
 function [amp, ph] = fit_sinusoid(t, y, w)
-% Least squares amplitude and phase of y at a known frequency.
 
 basis = [cos(w*t), sin(w*t), ones(size(t))];
 c = basis \ y;
@@ -472,7 +654,6 @@ end
 
 
 function [t, u, y] = read_log(path)
-% Time, input and output displacement columns of a simulator log.
 
 d = readmatrix(path);
 t = d(:,1); u = d(:,2); y = d(:,3);

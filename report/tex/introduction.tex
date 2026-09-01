@@ -4,8 +4,8 @@ The suspension of the simulated F-34B is a spring, mass and damper system whose 
 constant and damping constant are generated from my student number, so the plant is
 unknown before the experiment and cannot be looked up. The aim of this lab is to recover a
 transfer function for that plant from measurements alone, which is what system
-identification means in practice: choose inputs that make the unknown parameters visible in
-the output, then read those parameters off the response.
+identification means in practice, choosing inputs that make the unknown parameters visible
+in the output and then reading them off the response.
 
 Two experiments are used because each one exposes a different part of the model. A step
 input shows the transient directly, so the steady state gain, the presence or absence of
@@ -13,6 +13,12 @@ oscillation, and the damped period can be read from a single log. A set of sinus
 inputs samples the frequency response, which fixes the corner frequency and the phase
 behaviour, and gives an independent check on the values taken from the step. Where the two
 disagree, that disagreement is itself a result and is reported as such.
+
+That is what happened here. The two experiments agree on every plant parameter, to $0.1$\%
+on the damping ratio and $0.5$\% on the natural frequency, but the measured phase runs
+past $-180^\circ$, which no second order system can do. Section~\ref{sec:validation} traces
+that to a transport delay of one logger sample period and shows in Table~\ref{tab:refit}
+what happens to the identified plant when the delay is left out of the model.
 
 Section~\ref{sec:modelling} derives the model structure from the equation of motion given
 in the brief, and states which measurable feature of a response determines which parameter.

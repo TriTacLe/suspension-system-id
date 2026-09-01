@@ -3,18 +3,33 @@
 The suspension keyed to student number LXXTRI004 was identified as
 
 \begin{equation}
-    G(s) = \frac{1}{s^2 + \gap{b}\,s + \gap{k}},
+    G(s) = \frac{0.921\,e^{-0.101s}}{s^2 + 1.310\,s + 1.150},
 \end{equation}
 
-a \gap{underdamped / overdamped} second order system with gain \gap{A} m/V, damping ratio
-\gap{zeta} and natural frequency \gap{wn} rad/s, giving a spring coefficient of \gap{k} and
-a damping coefficient of \gap{b}.
+an underdamped second order system with gain $0.801$ m/V, damping ratio $0.611$ and natural
+frequency $1.072$ rad/s, giving a spring coefficient of $1.150$, a damping coefficient of
+$1.310$ and poles at $-0.655 \pm j\,0.849$. The input is scaled by $\alpha = 0.921$ and not
+applied as a force directly, and the measurement chain adds a delay of one sample period.
 
-The step test supplied all three parameters and the frequency response test confirmed the
-natural frequency independently, to within \gap{difference}. \gap{Say in one sentence
-whether the two experiments agree, and if they do not, which one you trust and why.}
+The step test supplied all three parameters and the two experiments agree. Fitting gain,
+damping ratio, natural frequency and delay to the twelve frequency points, using none of the
+step record, confirms the damping ratio to within $0.1$\% and the natural frequency to within
+$0.5$\%. That agreement needs the delay term. Read straight off the plot, the phase crosses
+$-90^\circ$ at $1.003$~rad/s rather than at $\omega_n$, which is the delay showing itself
+before it is fitted.
 
-The main limitation is the 100~ms sample period, which is coarse compared with a damped
-period of \gap{Td} s and can hide the true peak of the response. \gap{Add any limitation
-your own data actually showed, for example a non-dominant pole that never became visible, or
-a steady state that had not fully settled inside the record.}
+The main limitation is the $0.001$~m amplitude resolution of the logger. It leaves the first
+overshoot and the undershoot that follows it measurable, at $71$ and $6$ resolution steps, but
+puts the second overshoot at half a step, visible but too coarse to measure, so the time domain gives two
+readings of the damping ratio where a finer logger would give several. The $100$~ms sample
+period costs far less than that, $0.1$~mm at worst against a damped period of $7.4$~s, though
+it is the source of the delay term above. The one thing left unresolved is the size of that
+delay. The frequency points put it at $101$~ms and the step record at $58$~ms, and the repeats
+rule out the easy explanation, since three runs triggered at different times all return $58$~ms
+with no scatter. The zero order hold on the sampled input would account for the difference,
+contributing $50$~ms of phase to a sine sweep and nothing to a single step edge, but it also
+predicts an attenuation the measured magnitude does not show, so it is a hypothesis and not a
+finding. Nothing in the data calls for a third pole. The measured roll-off is $-39.1$~dB per
+decade over the five points above $2\omega_n$ against $-40$ for two poles, so whatever faster
+dynamics the suspension has sit above the $10$~rad/s the sweep reached and never became
+visible.
